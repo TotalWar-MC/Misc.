@@ -1,0 +1,37 @@
+name: TW-Core
+main: com.steffbeard.totalwar.core.Main
+author: Steffbeard
+version: 0.0.1
+commands:
+
+permissions:
+  Key.craft.key:
+    default: true
+    description: Allows you to craft a key.
+  Key.craft.masterkey:
+    default: op
+    description: Allows you to craft a master key.
+  Key.craft.keyclone:
+    default: true
+    description: Allows you to craft a clone of a key.
+  Key.craft.bunchofkeys:
+    default: true
+    description: Allows you to craft a bunch of keys.
+  Key.craft.padlockfinder:
+    default: true
+    description: Allows you to craft a padlock finder.
+  Key.use.key:
+    default: true
+    description: Allows you to use a key.
+  Key.use.masterkey:
+    default: op
+    description: Allows you to use a master key.
+  Key.use.bunchofkeys:
+    default: true
+    description: Allows you to use a bunch of keys.
+  Key.use.padlockfinder:
+    default: true
+    description: Allows you to use a padlock finder.
+  Key.command.getkey:
+    default: op
+    description: Allows you to use /key getkey.
