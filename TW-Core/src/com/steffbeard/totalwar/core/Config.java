@@ -42,6 +42,8 @@ public class Config extends Skyoconfig {
     public LinkedHashMap<String, String> shapeMaterials;
     @ConfigOptions(name = "options.enable-enchanting")
     public boolean enableEnchanting;
+    @ConfigOptions(name = "options.bow-buff")
+    public double bowBuff;
     
     protected Config(final File dataFolder) {
         super(new File(dataFolder, "config.yml"), Arrays.asList("Key configuration"));
@@ -51,6 +53,8 @@ public class Config extends Skyoconfig {
         this.disableHoppers = true;
         this.encryptLore = false;
         this.canRenameItems = false;
+        this.enableEnchanting = false;
+        this.bowBuff = 1.000000;
         this.keyMaterial = Material.TRIPWIRE_HOOK;
         this.keyName = ChatColor.GOLD + "Key";
         this.keyShape = Arrays.asList("I", "L");

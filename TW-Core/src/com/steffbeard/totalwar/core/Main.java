@@ -1,6 +1,9 @@
 package com.steffbeard.totalwar.core;
 
 import com.steffbeard.totalwar.core.utils.KeyUtils;
+
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.Location;
 import org.json.simple.JSONValue;
@@ -10,8 +13,11 @@ import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.PluginManager;
 import java.io.File;
 import org.bukkit.inventory.FurnaceRecipe;
@@ -30,6 +36,8 @@ import com.steffbeard.totalwar.core.listeners.GlobalListener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import com.steffbeard.totalwar.core.listeners.ArrowListener;
@@ -273,6 +281,46 @@ public class Main extends JavaPlugin
                 }
             }, 0L, 12L);
         }
+    }
+    
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    public void onPlayerInteract(PlayerInteractEvent event) {
+      if (!event.isCancelled()) {
+        onEnchantingTableUse(event);
+      }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST) // ignoreCancelled=false
+    public void onPlayerInteractAll(PlayerInteractEvent event) {
+    }
+    
+    @EventHandler
+    public void onEntityShootBowEventAlreadyIntializedSoIMadeThisUniqueName(EntityShootBowEvent event) {
+      Integer power = event.getBow().getEnchantmentLevel(Enchantment.ARROW_DAMAGE);
+      MetadataValue metadata = new FixedMetadataValue(this, power);
+      event.getProjectile().setMetadata("power", metadata);
+    }
+
+    @EventHandler
+    public void onArrowHitEntity(EntityDamageByEntityEvent event) {
+      Double multiplier = config.bowBuff;
+      if(multiplier <= 1.000001 && multiplier >= 0.999999) {
+        return;
+      }
+
+      if (event.getEntity() instanceof LivingEntity) {
+        Entity damager = event.getDamager();
+        if (damager instanceof Arrow) {
+          Arrow arrow = (Arrow) event.getDamager();
+          Double damage = event.getDamage() * config.bowBuff;
+          Integer power = 0;
+          if(arrow.hasMetadata("power")) {
+            power = arrow.getMetadata("power").get(0).asInt();
+          }
+          damage *= Math.pow(1.25, power - 5); // f(x) = 1.25^(x - 5)
+          event.setDamage(damage);
+        }
+      }
     }
     
     public void onEnchantingTableUse(PlayerInteractEvent event) {

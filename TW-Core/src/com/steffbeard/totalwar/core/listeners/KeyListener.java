@@ -3,9 +3,9 @@ package com.steffbeard.totalwar.core.listeners;
 import com.steffbeard.totalwar.core.*;
 import org.bukkit.event.Listener;
 
-public abstract class KeyListener implements Listener
-{
-    Main plugin;
+public abstract class KeyListener implements Listener {
+    
+	Main plugin;
     KeyAPI api;
     
     KeyListener(final Main plugin) {
