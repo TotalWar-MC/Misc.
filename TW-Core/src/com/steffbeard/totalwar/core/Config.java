@@ -48,7 +48,7 @@ public class Config extends Skyoconfig {
     public int quartz_gravel_percentage;
     
     protected Config(final File dataFolder) {
-        super(new File(dataFolder, "config.yml"), Arrays.asList("Key configuration"));
+        super(new File(dataFolder, "config.yml"), Arrays.asList("Core configuration"));
         this.enableInventoryWeight = true;
         this.entityFireTrail = true;
         this.reusableKeys = true;

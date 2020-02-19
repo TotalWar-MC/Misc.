@@ -290,6 +290,9 @@ public class Main extends JavaPlugin
         }
     }
     
+    // Reduce registered PlayerInteractEvent count. onPlayerInteractAll handles
+    //  cancelled events.
+    
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event) {
       if (!event.isCancelled()) {
