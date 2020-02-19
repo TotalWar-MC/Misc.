@@ -44,6 +44,8 @@ public class Config extends Skyoconfig {
     public boolean enableEnchanting;
     @ConfigOptions(name = "options.bow-buff")
     public double bowBuff;
+    @ConfigOptions(name = "quartz-gravel.percentage")
+    public int quartz_gravel_percentage;
     
     protected Config(final File dataFolder) {
         super(new File(dataFolder, "config.yml"), Arrays.asList("Key configuration"));
@@ -55,6 +57,7 @@ public class Config extends Skyoconfig {
         this.canRenameItems = false;
         this.enableEnchanting = false;
         this.bowBuff = 1.000000;
+        this.quartz_gravel_percentage = 1;
         this.keyMaterial = Material.TRIPWIRE_HOOK;
         this.keyName = ChatColor.GOLD + "Key";
         this.keyShape = Arrays.asList("I", "L");

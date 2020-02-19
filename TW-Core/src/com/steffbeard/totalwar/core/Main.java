@@ -26,6 +26,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import java.util.List;
+import java.util.Random;
 import java.util.Arrays;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -36,6 +37,7 @@ import com.steffbeard.totalwar.core.listeners.GlobalListener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -44,6 +46,7 @@ import com.steffbeard.totalwar.core.listeners.ArrowListener;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
 
 public class Main extends JavaPlugin
 {
@@ -58,6 +61,8 @@ public class Main extends JavaPlugin
     protected Messages messages;
     protected Data data;
 	private KeyAPI api;
+	
+	private Random prng_ = new Random();
     
     public void onEnable() {
         final File dataFolder = this.getDataFolder();
@@ -260,6 +265,8 @@ public class Main extends JavaPlugin
         }
     }
     
+    // tracks arrows to apply fire when land
+    
     private void trackEntity() {
         if (this.getConfig().getBoolean("entityFireTrail")) {
             this.timer = Bukkit.getScheduler().scheduleSyncRepeatingTask((Plugin)this, (Runnable)new Runnable() {
@@ -294,6 +301,8 @@ public class Main extends JavaPlugin
     public void onPlayerInteractAll(PlayerInteractEvent event) {
     }
     
+    // buffing bows
+    
     @EventHandler
     public void onEntityShootBowEventAlreadyIntializedSoIMadeThisUniqueName(EntityShootBowEvent event) {
       Integer power = event.getBow().getEnchantmentLevel(Enchantment.ARROW_DAMAGE);
@@ -320,6 +329,23 @@ public class Main extends JavaPlugin
           damage *= Math.pow(1.25, power - 5); // f(x) = 1.25^(x - 5)
           event.setDamage(damage);
         }
+      }
+    }
+    
+    // Quartz from Gravel
+
+    @EventHandler(ignoreCancelled=true, priority = EventPriority.HIGHEST)
+    public void onGravelBreak(BlockBreakEvent e) {
+      if(e.getBlock().getType() != Material.GRAVEL
+          || config.quartz_gravel_percentage <= 0) {
+        return;
+      }
+
+      if(prng_.nextInt(100) < config.quartz_gravel_percentage)
+      {
+        e.setCancelled(true);
+        e.getBlock().setType(Material.AIR);
+        dropItemAtLocation(e.getBlock().getLocation(), new ItemStack(Material.QUARTZ, 1));
       }
     }
     
@@ -355,6 +381,29 @@ public class Main extends JavaPlugin
             e.printStackTrace();
         }
     }
+    
+    /**
+	 * A better version of dropNaturally that mimics normal drop behavior.
+	 * 
+	 * The built-in version of Bukkit's dropItem() method places the item at the block 
+	 * vertex which can make the item jump around. 
+	 * This method places the item in the middle of the block location with a slight 
+	 * vertical velocity to mimic how normal broken blocks appear.
+	 * @param l The location to drop the item
+	 * @param is The item to drop
+	 * 
+	 * @author GordonFreemanQ
+	 */
+	public void dropItemAtLocation(final Location l, final ItemStack is) {
+		
+		// Schedule the item to drop 1 tick later
+		Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+			@Override
+			public void run() {
+				l.getWorld().dropItem(l.add(0.5, 0.5, 0.5), is).setVelocity(new Vector(0, 0.05, 0));
+			}
+		}, 1);
+	}
     
     public void reload() {
         this.onDisable();
