@@ -29,6 +29,9 @@ import com.steffbeard.totalwar.core.listeners.BlocksListener;
 import com.steffbeard.totalwar.core.listeners.GlobalListener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
+
 import com.steffbeard.totalwar.core.listeners.ArrowListener;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
@@ -79,6 +82,13 @@ public class Main extends JavaPlugin
         manager.registerEvents((Listener)new BunchOfKeysListener(), (Plugin)this);
         if (this.config.disableHoppers) {
             manager.registerEvents((Listener)new HopperListener(), (Plugin)this);
+            //***********
+            //* CRAFTING
+            //*	RECIPES
+            //***********
+            //
+            // chain helmet
+            //
             final ItemStack chelmet = new ItemStack(Material.CHAINMAIL_HELMET);
             final ItemMeta chmeta = chelmet.getItemMeta();
             chmeta.setDisplayName(ChatColor.GRAY + "Mail coif");
@@ -92,6 +102,9 @@ public class Main extends JavaPlugin
             chrecipe.setIngredient('@', Material.IRON_NUGGET);
             chrecipe.setIngredient('#', Material.AIR);
             Bukkit.addRecipe((Recipe)chrecipe);
+            //
+            // chainmail chest
+            //
             final ItemStack cchestplate = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
             final ItemMeta ccmeta = cchestplate.getItemMeta();
             ccmeta.setDisplayName(ChatColor.GRAY + "Mail Tunic");
@@ -104,6 +117,9 @@ public class Main extends JavaPlugin
             ccrecipe.setIngredient('@', Material.IRON_NUGGET);
             ccrecipe.setIngredient('#', Material.AIR);
             Bukkit.addRecipe((Recipe)ccrecipe);
+            //
+            // chainmail leggings
+            //
             final ItemStack cleggings = new ItemStack(Material.CHAINMAIL_LEGGINGS);
             final ItemMeta clmeta = cleggings.getItemMeta();
             clmeta.setDisplayName(ChatColor.GRAY + "Mail Leggings");
@@ -115,6 +131,9 @@ public class Main extends JavaPlugin
             clrecipe.setIngredient('@', Material.IRON_NUGGET);
             clrecipe.setIngredient('#', Material.AIR);
             Bukkit.addRecipe((Recipe)clrecipe);
+            //
+            // chain boots
+            //
             final ItemStack cboots = new ItemStack(Material.CHAINMAIL_BOOTS);
             final ItemMeta cbmeta = cboots.getItemMeta();
             cbmeta.setDisplayName(ChatColor.GRAY + "Mail Boots");
@@ -126,6 +145,9 @@ public class Main extends JavaPlugin
             cbrecipe.setIngredient('@', Material.IRON_NUGGET);
             cbrecipe.setIngredient('#', Material.AIR);
             Bukkit.addRecipe((Recipe)cbrecipe);
+            //
+            // saddle
+            //
             final ItemStack saddle = new ItemStack(Material.SADDLE, 1);
             final ItemMeta smeta = saddle.getItemMeta();
             smeta.setDisplayName(ChatColor.GRAY + "Saddle");
@@ -136,6 +158,9 @@ public class Main extends JavaPlugin
             srecipe.setIngredient('L', Material.LEATHER);
             srecipe.setIngredient('I', Material.IRON_INGOT);
             Bukkit.addRecipe((Recipe)srecipe);
+            //
+            // iron horse armor
+            //
             final ItemStack ironhorsearmor = new ItemStack(Material.IRON_BARDING);
             final ItemMeta ihameta = ironhorsearmor.getItemMeta();
             ihameta.setDisplayName(ChatColor.GRAY + "Horse Barding");
@@ -147,6 +172,9 @@ public class Main extends JavaPlugin
             iharecipe.setIngredient('S', Material.SADDLE);
             iharecipe.setIngredient('#', Material.AIR);
             Bukkit.addRecipe((Recipe)iharecipe);
+            //
+            // gold horse armor
+            //
             final ItemStack goldhorsearmor = new ItemStack(Material.GOLD_BARDING);
             final ItemMeta ghameta = goldhorsearmor.getItemMeta();
             ghameta.setDisplayName(ChatColor.RED + "Horse Barding");
@@ -158,11 +186,17 @@ public class Main extends JavaPlugin
             gharecipe.setIngredient('S', Material.SADDLE);
             gharecipe.setIngredient('#', Material.AIR);
             Bukkit.addRecipe((Recipe)gharecipe);
+            //
+            // Salt
+            //
             final ItemStack salt = new ItemStack(Material.SUGAR);
             final ItemMeta saltmeta = salt.getItemMeta();
             saltmeta.setDisplayName(new StringBuilder().append(ChatColor.WHITE).append(ChatColor.BOLD).append("Salt").toString());
             salt.setItemMeta(saltmeta);
             Bukkit.addRecipe((Recipe)new FurnaceRecipe(salt, Material.WATER_BUCKET));
+            //
+            // key
+            //
             final ItemStack key = new ItemStack(Material.TRIPWIRE_HOOK);
             final ItemMeta keymeta = key.getItemMeta();
             keymeta.setDisplayName(ChatColor.GOLD + "Key");
@@ -173,6 +207,9 @@ public class Main extends JavaPlugin
             keyrecipe.setIngredient('I', Material.IRON_INGOT);
             keyrecipe.setIngredient('L', Material.LEVER);
             Bukkit.addRecipe((Recipe)keyrecipe);
+            //
+            // masterkey
+            // 
             final ItemStack masterKey = new ItemStack(Material.NAME_TAG);
             final ItemMeta masterKeymeta = masterKey.getItemMeta();
             masterKeymeta.setDisplayName(ChatColor.DARK_PURPLE + "Master Key");
@@ -183,6 +220,9 @@ public class Main extends JavaPlugin
             masterKeyrecipe.setIngredient('C', Material.COMMAND);
             masterKeyrecipe.setIngredient('L', Material.LEVER);
             Bukkit.addRecipe((Recipe)masterKeyrecipe);
+            //
+            // bunch of keys
+            //
             final ItemStack bunchOfKeys = new ItemStack(Material.NAME_TAG);
             final ItemMeta bunchOfKeysmeta = bunchOfKeys.getItemMeta();
             bunchOfKeysmeta.setDisplayName(ChatColor.BLUE + "Bunch of keys");
@@ -233,6 +273,19 @@ public class Main extends JavaPlugin
                 }
             }, 0L, 12L);
         }
+    }
+    
+    public void onEnchantingTableUse(PlayerInteractEvent event) {
+      if(!config.enableEnchanting) {
+        return;
+      }
+      Action action = event.getAction();
+      Material material = event.getClickedBlock().getType();
+      boolean enchanting_table = action == Action.RIGHT_CLICK_BLOCK &&
+                     material.equals(Material.ENCHANTMENT_TABLE);
+      if(enchanting_table) {
+        event.setCancelled(true);
+      }
     }
     
     private final void handleLocations() {

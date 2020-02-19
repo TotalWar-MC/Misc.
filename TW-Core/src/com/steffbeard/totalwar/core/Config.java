@@ -40,6 +40,8 @@ public class Config extends Skyoconfig {
     public List<String> bunchOfKeysShape;
     @ConfigOptions(name = "shape-materials-v1")
     public LinkedHashMap<String, String> shapeMaterials;
+    @ConfigOptions(name = "options.enable-enchanting")
+    public boolean enableEnchanting;
     
     protected Config(final File dataFolder) {
         super(new File(dataFolder, "config.yml"), Arrays.asList("Key configuration"));
@@ -62,5 +64,5 @@ public class Config extends Skyoconfig {
         this.shapeMaterials.put("L", Material.LEVER.name());
         this.shapeMaterials.put("C", Material.COMMAND.name());
         this.shapeMaterials.put("S", Material.STRING.name());
-    }
+	}
 }
