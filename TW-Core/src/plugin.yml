@@ -2,7 +2,6 @@ name: TW-Core
 main: com.steffbeard.totalwar.core.Main
 author: Steffbeard
 version: 0.0.1
-commands:
 
 permissions:
   Key.craft.key:
