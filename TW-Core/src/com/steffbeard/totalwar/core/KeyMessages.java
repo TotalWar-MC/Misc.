@@ -3,10 +3,11 @@ package com.steffbeard.totalwar.core;
 import org.bukkit.ChatColor;
 import java.util.Arrays;
 import java.io.File;
-import com.steffbeard.totalwar.core.utils.Skyoconfig;
 
-public class Messages extends Skyoconfig
-{
+import com.steffbeard.totalwar.core.utils.ConfigManager;
+
+public class KeyMessages extends ConfigManager {
+	
     @ConfigOptions(name = "messages.prefix")
     public String prefix;
     @ConfigOptions(name = "messages.permission")
@@ -24,8 +25,8 @@ public class Messages extends Skyoconfig
     @ConfigOptions(name = "messages.6")
     public String message6;
     
-    protected Messages(final File dataFolder) {
-        super(new File(dataFolder, "messages.yml"), Arrays.asList("Key messages"));
+    protected KeyMessages(final File dataFolder) {
+        super(new File(dataFolder, "keymessages.yml"), Arrays.asList("Key messages"));
         this.prefix = ChatColor.AQUA + "[Key]";
         this.messagePermission = ChatColor.RED + "You do not have the permission to perform this action.";
         this.message1 = ChatColor.GREEN + "Padlock placed ! If you want to remove it, you have to break this block.";

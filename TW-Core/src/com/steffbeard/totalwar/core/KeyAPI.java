@@ -32,8 +32,8 @@ public class KeyAPI
         return KeyAPI.PLUGIN.config;
     }
     
-    public static final Messages getMessages() {
-        return KeyAPI.PLUGIN.messages;
+    public static final KeyMessages getMessages() {
+        return KeyAPI.PLUGIN.keymessages;
     }
     
     public static final ItemStack getKeyItem() {
@@ -53,7 +53,7 @@ public class KeyAPI
     }
     
     public static final void sendMessage(final CommandSender sender, final String message) {
-        sender.sendMessage(String.valueOf(KeyAPI.PLUGIN.messages.prefix) + " " + message);
+        sender.sendMessage(String.valueOf(KeyAPI.PLUGIN.keymessages.prefix) + " " + message);
     }
     
     public static final void createPadlock(final Location location) {
@@ -160,7 +160,7 @@ public class KeyAPI
     public static final boolean isValidKey(final ItemStack key, final Location location, final Player player) {
         if (isMasterKey(key)) {
             if (player != null && !player.hasPermission("Key.use.masterkey")) {
-                sendMessage((CommandSender)player, KeyAPI.PLUGIN.messages.messagePermission);
+                sendMessage((CommandSender)player, KeyAPI.PLUGIN.keymessages.messagePermission);
             }
             return true;
         }
@@ -169,14 +169,14 @@ public class KeyAPI
             final Location keyLocation = extractLocation(key);
             if (keyLocation != null && keyLocation.equals((Object)location)) {
                 if (player != null && !player.hasPermission("Key.use.key")) {
-                    sendMessage((CommandSender)player, KeyAPI.PLUGIN.messages.messagePermission);
+                    sendMessage((CommandSender)player, KeyAPI.PLUGIN.keymessages.messagePermission);
                 }
                 return true;
             }
             final ItemStack[] extractedKeys = extractKeys(key);
             if (extractedKeys != null) {
                 if (player != null && !player.hasPermission("Key.use.bunchofkeys")) {
-                    sendMessage((CommandSender)player, KeyAPI.PLUGIN.messages.messagePermission);
+                    sendMessage((CommandSender)player, KeyAPI.PLUGIN.keymessages.messagePermission);
                     return true;
                 }
                 ItemStack[] array;

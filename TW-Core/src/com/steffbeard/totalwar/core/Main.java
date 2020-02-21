@@ -58,7 +58,7 @@ public class Main extends JavaPlugin
     protected ItemStack bunchOfKeys;
     protected ItemStack padlockFinder;
     protected Config config;
-    protected Messages messages;
+    protected KeyMessages keymessages;
     protected Data data;
 	private KeyAPI api;
 	
@@ -73,9 +73,9 @@ public class Main extends JavaPlugin
         catch (Exception e) {
             e.printStackTrace();
         }
-        this.messages = new Messages(dataFolder);
+        this.keymessages = new KeyMessages(dataFolder);
         try {
-            this.messages.load();
+            this.keymessages.load();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -95,12 +95,14 @@ public class Main extends JavaPlugin
         manager.registerEvents((Listener)new BunchOfKeysListener(), (Plugin)this);
         if (this.config.disableHoppers) {
             manager.registerEvents((Listener)new HopperListener(), (Plugin)this);
-            //***********
-            //* CRAFTING
-            //*	RECIPES
-            //***********
+            
+        /*
+         * 
+         * Crafting recipes
+         * 
+         */
             //
-            // chain helmet
+            // chainmail helmet
             //
             final ItemStack chelmet = new ItemStack(Material.CHAINMAIL_HELMET);
             final ItemMeta chmeta = chelmet.getItemMeta();
@@ -251,6 +253,25 @@ public class Main extends JavaPlugin
         }
     }
     
+    /*
+     * 
+     *     Calander
+     *     
+     *   ig time	 ticks	      irl time
+		1 second	0.27	    0.0138 seconds
+		1 minute	16.6	    0.83 seconds
+		1 hour		1,000	    50 seconds
+		1 day		24,000	    20 minutes
+		7 days  	168,000	    2.3 hours
+		30 days	    720,000	    10 hours
+	365.2422 days	8,766,000	121.75 hours (5.072916 days)
+
+     */
+    
+    public void Calender() {
+    	
+    }
+    
     public void createConfig() {
         this.getConfig().options().copyDefaults(true);
         this.saveDefaultConfig();
@@ -386,7 +407,6 @@ public class Main extends JavaPlugin
     }
     
     /**
-	 * A better version of dropNaturally that mimics normal drop behavior.
 	 * 
 	 * The built-in version of Bukkit's dropItem() method places the item at the block 
 	 * vertex which can make the item jump around. 
@@ -395,7 +415,6 @@ public class Main extends JavaPlugin
 	 * @param l The location to drop the item
 	 * @param is The item to drop
 	 * 
-	 * @author GordonFreemanQ
 	 */
 	public void dropItemAtLocation(final Location l, final ItemStack is) {
 		
@@ -417,12 +436,12 @@ public class Main extends JavaPlugin
 		return this.api;
 	}
 
-	public Messages getMessages() {
-		return this.messages;
+	public KeyMessages getMessages() {
+		return this.keymessages;
 	}
 
     public void sendMessage(final CommandSender sender, final String message) {
-        sender.sendMessage(this.messages.prefix + " " + message);
+        sender.sendMessage(this.keymessages.prefix + " " + message);
 		
 	}
 }

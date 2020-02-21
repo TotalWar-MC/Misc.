@@ -6,9 +6,10 @@ import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.List;
 import org.bukkit.Material;
-import com.steffbeard.totalwar.core.utils.Skyoconfig;
 
-public class Config extends Skyoconfig {
+import com.steffbeard.totalwar.core.utils.ConfigManager;
+
+public class Config extends ConfigManager {
 
     public boolean enableInventoryWeight;
     public boolean entityFireTrail;
