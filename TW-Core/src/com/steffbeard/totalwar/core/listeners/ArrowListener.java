@@ -7,17 +7,25 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
+import org.bukkit.plugin.Plugin;
+
+import com.steffbeard.totalwar.core.Config;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.entity.Entity;
 import java.util.HashSet;
 import org.bukkit.event.Listener;
 
-public class ArrowListener implements Listener
-{
+public class ArrowListener implements Listener {
+	
+	private Config config;
     private HashSet<Entity> track_arrow;
     
     public ArrowListener() {
@@ -68,5 +76,36 @@ public class ArrowListener implements Listener
                 }
             }
         }
+    }
+    
+    // buffing bows
+    
+    @EventHandler
+    public void onEntityShootBowEventAlreadyIntializedSoIMadeThisUniqueName(EntityShootBowEvent event) {
+      Integer power = event.getBow().getEnchantmentLevel(Enchantment.ARROW_DAMAGE);
+      MetadataValue metadata = new FixedMetadataValue((Plugin) this, power);
+      event.getProjectile().setMetadata("power", metadata);
+    }
+
+    @EventHandler
+    public void onArrowHitEntity(EntityDamageByEntityEvent event) {
+      Double multiplier = config.bowBuff;
+      if(multiplier <= 1.000001 && multiplier >= 0.999999) {
+        return;
+      }
+
+      if (event.getEntity() instanceof LivingEntity) {
+        Entity damager = event.getDamager();
+        if (damager instanceof Arrow) {
+          Arrow arrow = (Arrow) event.getDamager();
+          Double damage = event.getDamage() * config.bowBuff;
+          Integer power = 0;
+          if(arrow.hasMetadata("power")) {
+            power = arrow.getMetadata("power").get(0).asInt();
+          }
+          damage *= Math.pow(1.25, power - 5); // f(x) = 1.25^(x - 5)
+          event.setDamage(damage);
+        }
+      }
     }
 }

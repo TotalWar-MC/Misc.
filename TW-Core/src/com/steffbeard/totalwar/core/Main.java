@@ -13,33 +13,32 @@ import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.PluginManager;
 import java.io.File;
-import org.bukkit.inventory.FurnaceRecipe;
+//import org.bukkit.inventory.FurnaceRecipe;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import java.util.List;
-import java.util.Random;
+import java.util.logging.Logger;
 import java.util.Arrays;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import com.steffbeard.totalwar.core.listeners.HopperListener;
+import com.steffbeard.totalwar.core.listeners.ItemChecker;
+import com.steffbeard.totalwar.core.listeners.SpoiledFoodListener;
+import com.steffbeard.totalwar.core.listeners.TorchListener;
 import com.steffbeard.totalwar.core.listeners.BunchOfKeysListener;
 import com.steffbeard.totalwar.core.listeners.BlocksListener;
 import com.steffbeard.totalwar.core.listeners.GlobalListener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import com.steffbeard.totalwar.core.listeners.ArrowListener;
@@ -51,6 +50,7 @@ import org.bukkit.util.Vector;
 public class Main extends JavaPlugin
 {
     public static Main instance;
+    public static Logger logger;
     private int timer;
     protected ItemStack key;
     protected ItemStack masterKey;
@@ -62,7 +62,9 @@ public class Main extends JavaPlugin
     protected Data data;
 	private KeyAPI api;
 	
-	private Random prng_ = new Random();
+	SpoiledFoodListener listener;
+	ItemChecker checker;
+	int taskID;
     
     public void onEnable() {
         final File dataFolder = this.getDataFolder();
@@ -87,12 +89,18 @@ public class Main extends JavaPlugin
         catch (Exception e) {
             e.printStackTrace();
         }
+        if (this.taskID != 0) {
+            Bukkit.getScheduler().cancelTask(this.taskID);
+        }
+        this.startItemCheck();
+        this.saveDefaultConfig();
         this.handleLocations();
         final PluginManager manager = Bukkit.getPluginManager();
         manager.registerEvents((Listener)new ArrowListener(), (Plugin)this);
         manager.registerEvents((Listener)new GlobalListener(), (Plugin)this);
         manager.registerEvents((Listener)new BlocksListener(), (Plugin)this);
         manager.registerEvents((Listener)new BunchOfKeysListener(), (Plugin)this);
+        manager.registerEvents((Listener)new TorchListener(), (Plugin)this);
         if (this.config.disableHoppers) {
             manager.registerEvents((Listener)new HopperListener(), (Plugin)this);
             
@@ -202,13 +210,20 @@ public class Main extends JavaPlugin
             gharecipe.setIngredient('#', Material.AIR);
             Bukkit.addRecipe((Recipe)gharecipe);
             //
-            // Salt
+            // Salt DEPRECATED, new way to make this, 
+            // keeping as a template for future furnace recipes
             //
+            /*
             final ItemStack salt = new ItemStack(Material.SUGAR);
             final ItemMeta saltmeta = salt.getItemMeta();
             saltmeta.setDisplayName(new StringBuilder().append(ChatColor.WHITE).append(ChatColor.BOLD).append("Salt").toString());
+            if (config.saltEnchanted) {
+            	saltmeta.addEnchant(Enchantment.DURABILITY, 0, true);
+            }
+            saltmeta.setLore((List<String>)Arrays.asList(ChatColor.WHITE + config.saltDescription));
             salt.setItemMeta(saltmeta);
             Bukkit.addRecipe((Recipe)new FurnaceRecipe(salt, Material.WATER_BUCKET));
+            */
             //
             // key
             //
@@ -249,8 +264,58 @@ public class Main extends JavaPlugin
             bunchOfKeysrecipe.setIngredient('L', Material.LEVER);
             bunchOfKeysrecipe.setIngredient('#', Material.AIR);
             Bukkit.addRecipe((Recipe)bunchOfKeysrecipe);
+           
+            /*
+             * Logger
+             */
+            
             this.getLogger().info("> TOTAL WAR CORE IS ONLINE.");
         }
+    }
+        public Main() {
+        	this.listener = new SpoiledFoodListener();
+        	this.taskID = 0;
+        }
+        
+        public static ItemStack salt() {
+            final ItemStack saltitem = new ItemStack(Material.SUGAR);
+            final ItemMeta saltmeta = saltitem.getItemMeta();
+            saltmeta.addEnchant(Enchantment.DURABILITY, 0, true);
+            saltmeta.setDisplayName(ChatColor.WHITE + "Salt");
+            saltmeta.setLore((List<String>)Arrays.asList(ChatColor.GRAY + "Place in a chest with food to preserve it"));
+            saltitem.setItemMeta(saltmeta);
+            return saltitem;
+        	}
+        
+        @SuppressWarnings("deprecation")
+		public void addRecipe() {
+            Material[] values;
+            for (int length = (values = Material.values()).length, i = 0; i < length; ++i) {
+                final Material mat = values[i];
+                if (mat.isEdible()) {
+                    final ShapelessRecipe recipe = new ShapelessRecipe(new ItemStack(mat));
+                    recipe.addIngredient(mat);
+                    recipe.addIngredient(Material.SUGAR);
+                    Bukkit.addRecipe((Recipe)recipe);
+                }
+            }
+        }
+        
+        public void startItemCheck() {
+            int delay = config.itemRefreshRate;
+            if (delay < 1) {
+                delay = 1;
+            }
+            this.taskID = Bukkit.getScheduler().scheduleSyncRepeatingTask((Plugin)this, (Runnable)new Runnable() {
+                @Override
+                public void run() {
+                    checker.now = System.currentTimeMillis();
+                    for (final Player p : Bukkit.getOnlinePlayers()) {
+                        checker.checkInventory((Inventory)p.getInventory(), false);
+                        checker.checkInventory(p.getOpenInventory().getTopInventory(), true);
+                    }
+                }
+            }, 0L, (long)(delay * 20));
     }
     
     /*
@@ -324,55 +389,7 @@ public class Main extends JavaPlugin
     @EventHandler(priority = EventPriority.LOWEST) // ignoreCancelled=false
     public void onPlayerInteractAll(PlayerInteractEvent event) {
     }
-    
-    // buffing bows
-    
-    @EventHandler
-    public void onEntityShootBowEventAlreadyIntializedSoIMadeThisUniqueName(EntityShootBowEvent event) {
-      Integer power = event.getBow().getEnchantmentLevel(Enchantment.ARROW_DAMAGE);
-      MetadataValue metadata = new FixedMetadataValue(this, power);
-      event.getProjectile().setMetadata("power", metadata);
-    }
-
-    @EventHandler
-    public void onArrowHitEntity(EntityDamageByEntityEvent event) {
-      Double multiplier = config.bowBuff;
-      if(multiplier <= 1.000001 && multiplier >= 0.999999) {
-        return;
-      }
-
-      if (event.getEntity() instanceof LivingEntity) {
-        Entity damager = event.getDamager();
-        if (damager instanceof Arrow) {
-          Arrow arrow = (Arrow) event.getDamager();
-          Double damage = event.getDamage() * config.bowBuff;
-          Integer power = 0;
-          if(arrow.hasMetadata("power")) {
-            power = arrow.getMetadata("power").get(0).asInt();
-          }
-          damage *= Math.pow(1.25, power - 5); // f(x) = 1.25^(x - 5)
-          event.setDamage(damage);
-        }
-      }
-    }
-    
-    // Quartz from Gravel
-
-    @EventHandler(ignoreCancelled=true, priority = EventPriority.HIGHEST)
-    public void onGravelBreak(BlockBreakEvent e) {
-      if(e.getBlock().getType() != Material.GRAVEL
-          || config.quartz_gravel_percentage <= 0) {
-        return;
-      }
-
-      if(prng_.nextInt(100) < config.quartz_gravel_percentage)
-      {
-        e.setCancelled(true);
-        e.getBlock().setType(Material.AIR);
-        dropItemAtLocation(e.getBlock().getLocation(), new ItemStack(Material.QUARTZ, 1));
-      }
-    }
-    
+        
     public void onEnchantingTableUse(PlayerInteractEvent event) {
       if(!config.enableEnchanting) {
         return;
