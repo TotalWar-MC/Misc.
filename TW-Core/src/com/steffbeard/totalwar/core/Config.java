@@ -18,6 +18,8 @@ public class Config extends ConfigManager {
     //public boolean enableInventoryWeight;
     @ConfigOptions(name = "options.enable-fire-arrows")
     public boolean entityFireTrail;
+    @ConfigOptions(name = "options.speed-multiplier")
+    public double speedMultiplier; 
     @ConfigOptions(name = "options.enable-torch-use")
     public boolean enableTorches;
     @ConfigOptions(name = "options.enable-entity-moving")
@@ -127,6 +129,7 @@ public class Config extends ConfigManager {
         super(new File(dataFolder, "config.yml"), Arrays.asList("Core configuration"));
         //this.enableInventoryWeight = true;
         this.entityFireTrail = true;
+        this.speedMultiplier = 4.0;
         this.enableTorches = true;
         this.hoistingDelay = 40;
         this.droppingDelay = 10;

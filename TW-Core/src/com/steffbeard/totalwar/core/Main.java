@@ -31,6 +31,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import com.steffbeard.totalwar.core.listeners.HopperListener;
 import com.steffbeard.totalwar.core.listeners.ItemChecker;
+import com.steffbeard.totalwar.core.listeners.MinecartListener;
 import com.steffbeard.totalwar.core.listeners.SpoiledFoodListener;
 import com.steffbeard.totalwar.core.listeners.TorchListener;
 import com.steffbeard.totalwar.core.listeners.BunchOfKeysListener;
@@ -95,12 +96,14 @@ public class Main extends JavaPlugin
         this.startItemCheck();
         this.saveDefaultConfig();
         this.handleLocations();
+        speed_multiplier = config.speedMultiplier;
         final PluginManager manager = Bukkit.getPluginManager();
         manager.registerEvents((Listener)new ArrowListener(), (Plugin)this);
         manager.registerEvents((Listener)new GlobalListener(), (Plugin)this);
         manager.registerEvents((Listener)new BlocksListener(), (Plugin)this);
         manager.registerEvents((Listener)new BunchOfKeysListener(), (Plugin)this);
         manager.registerEvents((Listener)new TorchListener(), (Plugin)this);
+        manager.registerEvents((Listener)new MinecartListener(), (Plugin)this);
         if (this.config.disableHoppers) {
             manager.registerEvents((Listener)new HopperListener(), (Plugin)this);
             
@@ -447,6 +450,12 @@ public class Main extends JavaPlugin
     public void reload() {
         this.onDisable();
         this.onEnable();
+    }
+    
+    private static double speed_multiplier;
+
+    public static double getMultiplier() {
+        return speed_multiplier;
     }
 
 	public KeyAPI getAPI() {

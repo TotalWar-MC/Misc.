@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
+@SuppressWarnings({"unused", "unlikely-arg-type"})
 public class TorchListener implements Listener {
 
 	/*
@@ -23,9 +24,6 @@ public class TorchListener implements Listener {
 		
 		if(mainhand.equals(Material.TORCH)) {
 			if(action.equals(Action.LEFT_CLICK_BLOCK)) {
-				
-			}else
-			if(action.equals(Action.PHYSICAL)) {
 				
 			}
 			
