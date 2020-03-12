@@ -1,3 +1,5 @@
+/*
+ * 
 package com.steffbeard.totalwar.core.listeners;
 
 import org.bukkit.Material;
@@ -12,9 +14,9 @@ import org.bukkit.inventory.PlayerInventory;
 @SuppressWarnings({"unused", "unlikely-arg-type"})
 public class TorchListener implements Listener {
 
-	/*
+	 *
 	 * Makes torchs work like flint and steals for the aesthetic
-	 */
+	 *
 	
 	@EventHandler
 	public void onInteract(PlayerInteractEvent event) {
@@ -30,3 +32,4 @@ public class TorchListener implements Listener {
 		}
 	}
 }
+*/
