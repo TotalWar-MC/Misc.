@@ -37,6 +37,7 @@ import org.bukkit.util.Vector;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
+import com.steffbeard.totalwar.core.commands.Playtime;
 import com.steffbeard.totalwar.core.listeners.ArrowListener;
 import com.steffbeard.totalwar.core.listeners.BlocksListener;
 import com.steffbeard.totalwar.core.listeners.BunchOfKeysListener;
@@ -59,7 +60,7 @@ public class Main extends JavaPlugin
     protected ItemStack bunchOfKeys;
     protected ItemStack padlockFinder;
     protected Config config;
-    protected KeyMessages keymessages;
+    protected Messages messages;
     protected Data data;
 	private KeyAPI api;
 	
@@ -76,9 +77,9 @@ public class Main extends JavaPlugin
         catch (Exception e) {
             e.printStackTrace();
         }
-        this.keymessages = new KeyMessages(dataFolder);
+        this.messages = new Messages(dataFolder);
         try {
-            this.keymessages.load();
+            this.messages.load();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -290,7 +291,7 @@ public class Main extends JavaPlugin
             return saltitem;
         	}
         
-        private void registerCommands() {
+        public void registerCommands() {
     		getCommand("playtime").setExecutor(new Playtime());
     	}
         
@@ -466,12 +467,12 @@ public class Main extends JavaPlugin
 		return this.api;
 	}
 
-	public KeyMessages getMessages() {
-		return this.keymessages;
+	public Messages getMessages() {
+		return this.messages;
 	}
 
     public void sendMessage(final CommandSender sender, final String message) {
-        sender.sendMessage(this.keymessages.prefix + " " + message);
+        sender.sendMessage(this.messages.prefix + " " + message);
 		
 	}
 }

@@ -29,7 +29,7 @@ public class Messages extends ConfigManager {
     
     protected Messages(final File dataFolder) {
         super(new File(dataFolder, "messages.yml"), Arrays.asList("Messages"));
-        this.prefix = ChatColor.AQUA + "[Key]";
+        this.prefix = ChatColor.DARK_RED + "[TW]";
         this.messagePermission = ChatColor.RED + "You do not have the permission to perform this action.";
         this.message1 = ChatColor.GREEN + "Padlock placed ! If you want to remove it, you have to break this block.";
         this.message2 = ChatColor.GOLD + "Padlock removed.";
