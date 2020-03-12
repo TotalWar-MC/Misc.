@@ -31,7 +31,7 @@ public class PortcullisBlockListener implements Listener {
 	
     public PortcullisBlockListener(Main plugin) {
         this.plugin = plugin;
-        wallMaterials.addAll(config.additionalWallMaterials);
+        wallMaterials.addAll(Config.additionalWallMaterials);
     }
 
 	@EventHandler(priority= EventPriority.MONITOR)
