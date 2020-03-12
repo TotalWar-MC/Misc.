@@ -103,7 +103,6 @@ public class Main extends JavaPlugin
         this.startItemCheck();
         this.saveDefaultConfig();
         this.handleLocations();
-        speed_multiplier = config.speedMultiplier;
         final PluginManager manager = Bukkit.getPluginManager();
         manager.registerEvents((Listener)new ArrowListener(), (Plugin)this);
         manager.registerEvents((Listener)new GlobalListener(), (Plugin)this);
@@ -478,11 +477,9 @@ public class Main extends JavaPlugin
         this.onDisable();
         this.onEnable();
     }
-    
-    private static double speed_multiplier;
 
     public static double getMultiplier() {
-        return speed_multiplier;
+        return Config.speedMultiplier;
     }
 
 	public KeyAPI getAPI() {
@@ -496,14 +493,5 @@ public class Main extends JavaPlugin
     public void sendMessage(final CommandSender sender, final String message) {
         sender.sendMessage(this.messages.prefix + " " + message);
 	}
-    
-    public static NoteBlockPlayerMain getNoteBlockAPI() {
-        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("NoteBlockAPI");
 
-        if (plugin == null || !(plugin instanceof NoteBlockPlayerMain)) {
-            return null;
-        }
-
-        return (NoteBlockPlayerMain) plugin;
-    }
 }
