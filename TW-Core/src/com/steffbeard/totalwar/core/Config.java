@@ -35,7 +35,7 @@ public class Config extends ConfigManager {
     @ConfigOptions(name = "portcullis-power-blocks.list")
     public HashSet<Integer> powerBlocks;
     @ConfigOptions(name = "additional-wall-materials.list")
-    public HashSet<Integer> additionalWallMaterials;
+    public static HashSet<Integer> additionalWallMaterials;
     @ConfigOptions(name = "options.state-change-color")
     public boolean stateChangeColor;
     @ConfigOptions(name = "options.enable-freezing")
@@ -325,7 +325,7 @@ public class Config extends ConfigManager {
     public static final int BLK_WOODEN_BUTTON         = 143;
 
     public static final int BLK_TRAPPED_CHEST                 = 146;
-   public static final int BLK_WEIGHTED_PRESSURE_PLATE_LIGHT  = 147;
+    public static final int BLK_WEIGHTED_PRESSURE_PLATE_LIGHT  = 147;
     public static final int BLK_WEIGHTED_PRESSURE_PLATE_HEAVY = 148;
     public static final int BLK_REDSTONE_COMPARATOR_OFF       = 149;
     public static final int BLK_REDSTONE_COMPARATOR_ON        = 150;

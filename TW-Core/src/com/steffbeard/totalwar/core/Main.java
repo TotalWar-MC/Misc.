@@ -108,7 +108,8 @@ public class Main extends JavaPlugin
         manager.registerEvents((Listener)new GlobalListener(), (Plugin)this);
         manager.registerEvents((Listener)new BlocksListener(), (Plugin)this);
         manager.registerEvents((Listener)new BunchOfKeysListener(), (Plugin)this);
-        manager.registerEvents((Listener)new TorchListener(), (Plugin)this);
+        // deprecated until later
+        //manager.registerEvents((Listener)new TorchListener(), (Plugin)this);
         manager.registerEvents((Listener)new MinecartListener(), (Plugin)this);
         if (this.config.disableHoppers) {
             manager.registerEvents((Listener)new HopperListener(), (Plugin)this);
