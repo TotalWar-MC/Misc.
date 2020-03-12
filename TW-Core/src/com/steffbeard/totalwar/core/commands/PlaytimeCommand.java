@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import com.steffbeard.totalwar.core.Messages;
 import com.steffbeard.totalwar.core.utils.Arithmetic;
 
-public class Playtime implements CommandExecutor {
+public class PlaytimeCommand implements CommandExecutor {
 
 	Player player;
 	@Override

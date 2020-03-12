@@ -37,7 +37,11 @@ import org.bukkit.util.Vector;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-import com.steffbeard.totalwar.core.commands.Playtime;
+import com.steffbeard.totalwar.core.calander.CalendarFiles;
+import com.steffbeard.totalwar.core.calander.DayExtend;
+import com.steffbeard.totalwar.core.calander.PCalendar;
+import com.steffbeard.totalwar.core.commands.CalendarCommand;
+import com.steffbeard.totalwar.core.commands.PlaytimeCommand;
 import com.steffbeard.totalwar.core.listeners.ArrowListener;
 import com.steffbeard.totalwar.core.listeners.BlocksListener;
 import com.steffbeard.totalwar.core.listeners.BunchOfKeysListener;
@@ -53,6 +57,8 @@ public class Main extends JavaPlugin
 {
     public static Main instance;
     public static Logger logger;
+    public static CalendarFiles calendarFiles;
+    public static PCalendar pCalendar;
     private int timer;
     protected ItemStack key;
     protected ItemStack masterKey;
@@ -107,7 +113,21 @@ public class Main extends JavaPlugin
         manager.registerEvents((Listener)new MinecartListener(), (Plugin)this);
         if (this.config.disableHoppers) {
             manager.registerEvents((Listener)new HopperListener(), (Plugin)this);
-            
+        
+        /*
+         * Get the stuff for the calendar
+         */
+        CommandSender console = Bukkit.getConsoleSender();
+        Bukkit.dispatchCommand(console, "gamerule doDaylightCycle false");
+
+        calendarFiles = new CalendarFiles();
+        calendarFiles.buildCalendar();
+
+        pCalendar = new PCalendar(calendarFiles.getCalendar(), calendarFiles.getTicks());  
+        
+        new DayExtend().runTaskTimerAsynchronously(this, 0, 3);
+
+        
         /*
          * 
          * Crafting recipes
@@ -272,7 +292,7 @@ public class Main extends JavaPlugin
             /*
              * Logger
              */
-            
+            registerCommands();
             this.getLogger().info("> TOTAL WAR CORE IS ONLINE.");
         }
     }
@@ -292,7 +312,9 @@ public class Main extends JavaPlugin
         	}
         
         public void registerCommands() {
-    		getCommand("playtime").setExecutor(new Playtime());
+    		getCommand("playtime").setExecutor(new PlaytimeCommand());
+    		getCommand("calendar").setExecutor(new CalendarCommand());
+    		getCommand("cal").setExecutor(new CalendarCommand());
     	}
         
         @SuppressWarnings("deprecation")
@@ -473,6 +495,15 @@ public class Main extends JavaPlugin
 
     public void sendMessage(final CommandSender sender, final String message) {
         sender.sendMessage(this.messages.prefix + " " + message);
-		
 	}
+    
+    public static NoteBlockPlayerMain getNoteBlockAPI() {
+        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("NoteBlockAPI");
+
+        if (plugin == null || !(plugin instanceof NoteBlockPlayerMain)) {
+            return null;
+        }
+
+        return (NoteBlockPlayerMain) plugin;
+    }
 }
