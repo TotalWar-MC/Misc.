@@ -1,52 +1,52 @@
 package com.steffbeard.totalwar.core;
 
-import com.steffbeard.totalwar.core.utils.KeyUtils;
-
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.Location;
-import org.json.simple.JSONValue;
-import org.json.simple.JSONObject;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Logger;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.PluginManager;
-import java.io.File;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 //import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
-import org.bukkit.NamespacedKey;
-import org.bukkit.enchantments.Enchantment;
-import java.util.List;
-import java.util.logging.Logger;
-import java.util.Arrays;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+
+import com.steffbeard.totalwar.core.listeners.ArrowListener;
+import com.steffbeard.totalwar.core.listeners.BlocksListener;
+import com.steffbeard.totalwar.core.listeners.BunchOfKeysListener;
+import com.steffbeard.totalwar.core.listeners.GlobalListener;
 import com.steffbeard.totalwar.core.listeners.HopperListener;
 import com.steffbeard.totalwar.core.listeners.ItemChecker;
 import com.steffbeard.totalwar.core.listeners.MinecartListener;
 import com.steffbeard.totalwar.core.listeners.SpoiledFoodListener;
 import com.steffbeard.totalwar.core.listeners.TorchListener;
-import com.steffbeard.totalwar.core.listeners.BunchOfKeysListener;
-import com.steffbeard.totalwar.core.listeners.BlocksListener;
-import com.steffbeard.totalwar.core.listeners.GlobalListener;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
-
-import com.steffbeard.totalwar.core.listeners.ArrowListener;
-import org.bukkit.Bukkit;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.Vector;
+import com.steffbeard.totalwar.core.utils.KeyUtils;
 
 public class Main extends JavaPlugin
 {
@@ -118,7 +118,7 @@ public class Main extends JavaPlugin
             final ItemStack chelmet = new ItemStack(Material.CHAINMAIL_HELMET);
             final ItemMeta chmeta = chelmet.getItemMeta();
             chmeta.setDisplayName(ChatColor.GRAY + "Mail coif");
-            chmeta.setLore((List<String>)Arrays.asList("'Tis but a scratch.'", "'A scratch!? Your arm's off!'"));
+           // chmeta.setLore((List<String>)Arrays.asList("'Tis but a scratch.'", "'A scratch!? Your arm's off!'"));
             chelmet.setItemMeta(chmeta);
             chelmet.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
             chelmet.addEnchantment(Enchantment.PROTECTION_PROJECTILE, 4);
@@ -134,7 +134,7 @@ public class Main extends JavaPlugin
             final ItemStack cchestplate = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
             final ItemMeta ccmeta = cchestplate.getItemMeta();
             ccmeta.setDisplayName(ChatColor.GRAY + "Mail Tunic");
-            ccmeta.setLore((List<String>)Arrays.asList("'Very airy'"));
+          //  ccmeta.setLore((List<String>)Arrays.asList("'Very airy'"));
             cchestplate.setItemMeta(ccmeta);
             cchestplate.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
             final NamespacedKey cckey = new NamespacedKey((Plugin)this, "chainmail_chestplate");
@@ -149,7 +149,7 @@ public class Main extends JavaPlugin
             final ItemStack cleggings = new ItemStack(Material.CHAINMAIL_LEGGINGS);
             final ItemMeta clmeta = cleggings.getItemMeta();
             clmeta.setDisplayName(ChatColor.GRAY + "Mail Leggings");
-            clmeta.setLore((List<String>)Arrays.asList("'Stylish.'"));
+          //  clmeta.setLore((List<String>)Arrays.asList("'Stylish.'"));
             cleggings.setItemMeta(clmeta);
             final NamespacedKey clkey = new NamespacedKey((Plugin)this, "chainmail_leggings");
             final ShapedRecipe clrecipe = new ShapedRecipe(clkey, cleggings);
@@ -163,7 +163,7 @@ public class Main extends JavaPlugin
             final ItemStack cboots = new ItemStack(Material.CHAINMAIL_BOOTS);
             final ItemMeta cbmeta = cboots.getItemMeta();
             cbmeta.setDisplayName(ChatColor.GRAY + "Mail Boots");
-            cbmeta.setLore((List<String>)Arrays.asList("'Stylish.'"));
+          //  cbmeta.setLore((List<String>)Arrays.asList("'Stylish.'"));
             cboots.setItemMeta(cbmeta);
             final NamespacedKey cbkey = new NamespacedKey((Plugin)this, "chainmail_boots");
             final ShapedRecipe cbrecipe = new ShapedRecipe(cbkey, cboots);
@@ -289,6 +289,10 @@ public class Main extends JavaPlugin
             saltitem.setItemMeta(saltmeta);
             return saltitem;
         	}
+        
+        private void registerCommands() {
+    		getCommand("playtime").setExecutor(new Playtime());
+    	}
         
         @SuppressWarnings("deprecation")
 		public void addRecipe() {

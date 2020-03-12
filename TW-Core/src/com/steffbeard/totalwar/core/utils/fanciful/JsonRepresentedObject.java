@@ -1,4 +1,4 @@
-package com.steffbeard.totalwar.core;
+package com.steffbeard.totalwar.core.utils.fanciful;
 
 import com.google.gson.stream.JsonWriter;
 

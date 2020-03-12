@@ -1,10 +1,11 @@
-package com.steffbeard.totalwar.core;
+package com.steffbeard.totalwar.core.utils.fanciful;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.stream.JsonWriter;
+
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 /**

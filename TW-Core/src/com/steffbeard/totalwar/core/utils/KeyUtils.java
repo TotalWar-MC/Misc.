@@ -1,7 +1,5 @@
 package com.steffbeard.totalwar.core.utils;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import org.bukkit.Material;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.entity.LivingEntity;
@@ -12,17 +10,22 @@ import org.bukkit.block.Block;
 import org.bukkit.material.TrapDoor;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.block.Chest;
-import com.steffbeard.totalwar.core.KeyAPI;
 import org.bukkit.Location;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.ChatColor;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Collection;
 import java.util.Map;
 import java.util.List;
 import java.util.Random;
 import java.util.Arrays;
-import org.bukkit.ChatColor;
+
+import com.steffbeard.totalwar.core.KeyAPI;
+import com.steffbeard.totalwar.core.utils.DoorUtils;
 
 public class KeyUtils
 {

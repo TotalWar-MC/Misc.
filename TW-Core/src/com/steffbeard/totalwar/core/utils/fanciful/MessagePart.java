@@ -1,8 +1,9 @@
-package com.steffbeard.totalwar.core;
+package com.steffbeard.totalwar.core.utils.fanciful;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.gson.stream.JsonWriter;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
