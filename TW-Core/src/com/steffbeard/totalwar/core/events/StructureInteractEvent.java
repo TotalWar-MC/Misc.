@@ -6,6 +6,8 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import com.steffbeard.totalwar.core.multiblock.structure.StructureData;
+
 public class StructureInteractEvent extends Event implements Cancellable {
 	private StructureData data = null;
 	private boolean cancelled = false;
