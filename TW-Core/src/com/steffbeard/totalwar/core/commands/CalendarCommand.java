@@ -14,6 +14,7 @@ import java.text.DecimalFormat;
 import java.time.Month;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -27,9 +28,17 @@ import com.steffbeard.totalwar.core.utils.fanciful.FancyMessage;
 public class CalendarCommand implements CommandExecutor {
 	
 	private Messages message;
-	private Main main;
+	private Main plugin;
 	private CalendarFiles calendarFiles;
-	private PCalendar pCalendar;
+	private static PCalendar pCalendar;
+	
+	 public final static String dashes = ChatColor.DARK_RED + "" + ChatColor.STRIKETHROUGH + "" + "-----------";
+	 public final static String calendarbot = ChatColor.DARK_RED + "" + ChatColor.STRIKETHROUGH + "" + "----------------------------------------";
+	 public final static String dashescalendar = ChatColor.YELLOW + "" + ChatColor.STRIKETHROUGH + "" + "------";
+	 public final static String calendartop = dashes + ChatColor.GOLD + "[" + "TW" + ChatColor.GOLD + " : " + ChatColor.GREEN + "Calendar" + ChatColor.GOLD + "]" + dashes;
+	 public final static String errormsg = " There was an error processing your command. Use: ";
+	 public final static HashMap<String, PEvent> senderEventTitle = new HashMap<>();
+	 public final static HashMap<String, PEvent> senderEventDesc = new HashMap<>();
 	
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
@@ -43,7 +52,7 @@ public class CalendarCommand implements CommandExecutor {
                 Permission listPerm = new Permission("core.calendar.list");
 
                 if (!sender.hasPermission(calendarAdminPerm) && !sender.hasPermission(standardPerm)) {
-                    main.sendMessage(sender, message.messagePermission);
+                    plugin.sendMessage(sender, message.messagePermission);
 
                     return false;
                 }
@@ -57,7 +66,7 @@ public class CalendarCommand implements CommandExecutor {
                 if (args[0].equalsIgnoreCase("admin") || args[0].equalsIgnoreCase("a")) {
 
                     if (!sender.hasPermission(calendarAdminPerm)) {
-                    	main.sendMessage(sender, message.messagePermission);
+                    	plugin.sendMessage(sender, message.messagePermission);
 
                         return false;
                     }
@@ -107,7 +116,7 @@ public class CalendarCommand implements CommandExecutor {
                                     officialtime = time;
 
                                 } else {
-                                    officialtime = pCalendar.get12HrTime(pCalendar.getWorld().getTime());
+                                    officialtime = PCalendar.get12HrTime(pCalendar.getWorld().getTime());
                                 }
 
 
@@ -118,7 +127,7 @@ public class CalendarCommand implements CommandExecutor {
                                         month_string + " " + gc.get(Calendar.YEAR) + ChatColor.GREEN + ". The time is now " + ChatColor.GOLD + officialtime);
 
                                 pCalendar.setCalendar(gc);
-                                pCalendar.setTicks(pCalendar.getTicksOf12HrTime(officialtime));
+                                pCalendar.setTicks(PCalendar.getTicksOf12HrTime(officialtime));
                                 calendarFiles.save();
 
                                 return true;
@@ -427,7 +436,7 @@ public class CalendarCommand implements CommandExecutor {
                                         case "list":
                                         case "l":
                                             sender.sendMessage(ChatColor.DARK_GRAY + "" + ChatColor.STRIKETHROUGH + "" + "------------" + ChatColor.DARK_GRAY + "[" + ChatColor.GOLD + " Page 1" + ChatColor.DARK_GRAY + " ]" + ChatColor.STRIKETHROUGH + "------------");
-                                            sender.sendMessage(String.format("%-22s %s", datesColor + "Setting", ChatColor.GOLD + "Value"));
+                                            sender.sendMessage(String.format("%-22s %s", ChatColor.AQUA + "Setting", ChatColor.GOLD + "Value"));
                                             sender.sendMessage("");
 
                                             for (String setting : calendarFiles.getKeySettings()) { //Gather all events
@@ -469,8 +478,7 @@ public class CalendarCommand implements CommandExecutor {
                 } else if (args[0].equalsIgnoreCase("list") || args[0].equalsIgnoreCase("l")) {
 
                     if (!sender.hasPermission(calendarAdminPerm) && !sender.hasPermission(listPerm)) {
-                        sender.sendMessage(nopermscolor + " You have no permission " + nopermsparenthesis + "(" + nopermsidentity +
-                                listPerm.getName() + nopermsparenthesis + ")" + nopermscolor + " to access this command.");
+                        plugin.sendMessage(sender, message.messagePermission);                   
 
                         return false;
                     }
@@ -509,7 +517,7 @@ public class CalendarCommand implements CommandExecutor {
                     }
 
                     sender.sendMessage(ChatColor.DARK_GRAY + "" + ChatColor.STRIKETHROUGH + "" + "------------" + ChatColor.DARK_GRAY + "[" + ChatColor.GOLD + " Page " + page + ChatColor.DARK_GRAY + " ]" + ChatColor.STRIKETHROUGH + "------------");
-                    sender.sendMessage(String.format("%-22s %s", datesColor + "Date (mm/dd/yy)", ChatColor.GOLD + "Event Name")); //Header 17
+                    sender.sendMessage(String.format("%-22s %s", ChatColor.AQUA + "Date (mm/dd/yy)", ChatColor.GOLD + "Event Name")); //Header 17
                     sender.sendMessage("");
 
                     for (PEvent event : events) { //Gather all events
@@ -527,8 +535,8 @@ public class CalendarCommand implements CommandExecutor {
                         String month_in_string = getMonthInString(event.getCalendar()); //month as January
 
 
-                        String formatted_date = datesColor + month + datesSptr + "-" + datesColor + day + datesSptr + "-" + datesColor + year; //20
-                        String full_formatted_date = datesColor + day + " " + month_in_string + " " + year + " | " + time;
+                        String formatted_date = ChatColor.AQUA + month + ChatColor.DARK_GRAY + "-" + ChatColor.AQUA + day + ChatColor.DARK_GRAY + "-" + ChatColor.AQUA + year; //20
+                        String full_formatted_date = ChatColor.AQUA + day + " " + month_in_string + " " + year + " | " + time;
                         String formatted_name = ChatColor.GOLD + name;
                         String formatted_desc = formatted_name + ": " + ChatColor.GOLD + event.getDescription();
 
@@ -718,7 +726,7 @@ public class CalendarCommand implements CommandExecutor {
 
         GregorianCalendar gc = pCalendar.getCalendar();
 
-        String time = pCalendar.get12HrTime(pCalendar.getTicks());
+        String time = PCalendar.get12HrTime(pCalendar.getTicks());
 
         String month = Month.of(gc.get(Calendar.MONTH) + 1).toString().toLowerCase();
         String firstletter = month.substring(0, 1).toUpperCase();
@@ -820,13 +828,13 @@ public class CalendarCommand implements CommandExecutor {
         sender.sendMessage(ChatColor.RESET + "To add an event, do the following (hover for example): ");
         new FancyMessage("/cal admin e add <day> <month> <year> [optional: time]")
                 .color(ChatColor.YELLOW)
-                .tooltip(ChatColor.RESET + "Example: " + adminidentity + "/cal admin e add 13 2 1970 5:45 P.M.\n" + ChatColor.RESET + "The following example would add an event in " + ChatColor.GOLD + "13 February 1970 5:45 P.M.")
+                .tooltip(ChatColor.RESET + "Example: " + ChatColor.YELLOW + "/cal admin e add 13 2 1970 5:45 P.M.\n" + ChatColor.RESET + "The following example would add an event in " + ChatColor.GOLD + "13 February 1970 5:45 P.M.")
                 .send(sender);
         sender.sendMessage("");
         sender.sendMessage(ChatColor.RESET + "To remove an event, do the following (hover for example): ");
         new FancyMessage("/cal admin e remove <title-of-event>")
                 .color(ChatColor.YELLOW)
-                .tooltip(ChatColor.RESET + "Example: " + adminidentity + "/cal admin e remove myTitle\n" + ChatColor.RESET + "The following example would remove the event with the name of" + ChatColor.GOLD + " \"myTitle\"")
+                .tooltip(ChatColor.RESET + "Example: " + ChatColor.YELLOW + "/cal admin e remove myTitle\n" + ChatColor.RESET + "The following example would remove the event with the name of" + ChatColor.GOLD + " \"myTitle\"")
                 .send(sender);
 
     }
