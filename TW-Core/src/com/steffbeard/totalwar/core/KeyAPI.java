@@ -18,42 +18,42 @@ import org.bukkit.Bukkit;
 
 public class KeyAPI
 {
-    private static final Main PLUGIN;
+    private static final Main plugin;
     
     static {
-        PLUGIN = (Main)Bukkit.getPluginManager().getPlugin("Main");
+        plugin = (Main)Bukkit.getPluginManager().getPlugin("Main");
     }
     
     public static final Main getPlugin() {
-        return KeyAPI.PLUGIN;
+        return KeyAPI.plugin;
     }
     
     public static final Config getConfig() {
-        return KeyAPI.PLUGIN.config;
+        return KeyAPI.plugin.config;
     }
     
     public static final Messages getMessages() {
-        return KeyAPI.PLUGIN.messages;
+        return KeyAPI.plugin.messages;
     }
     
     public static final ItemStack getKeyItem() {
-        return KeyAPI.PLUGIN.key.clone();
+        return KeyAPI.plugin.key.clone();
     }
     
     public static final ItemStack getMasterKeyItem() {
-        return KeyAPI.PLUGIN.masterKey.clone();
+        return KeyAPI.plugin.masterKey.clone();
     }
     
     public static final ItemStack getKeyCloneItem() {
-        return KeyAPI.PLUGIN.keyClone.clone();
+        return KeyAPI.plugin.keyClone.clone();
     }
     
     public static final ItemStack getPadlockFinderItem() {
-        return KeyAPI.PLUGIN.padlockFinder.clone();
+        return KeyAPI.plugin.padlockFinder.clone();
     }
     
     public static final void sendMessage(final CommandSender sender, final String message) {
-        sender.sendMessage(String.valueOf(KeyAPI.PLUGIN.messages.prefix) + " " + message);
+        sender.sendMessage(String.valueOf(KeyAPI.plugin.messages.prefix) + " " + message);
     }
     
     public static final void createPadlock(final Location location) {
@@ -62,7 +62,7 @@ public class KeyAPI
     
     public static final void createPadlock(final Location location, final ItemStack key) {
         KeyUtils.correctLocation(location);
-        KeyAPI.PLUGIN.data.padlocks.add(location);
+        KeyAPI.plugin.data.padlocks.add(location);
         if (isBlankKey(key)) {
             formatItem(location, key);
         }
@@ -74,7 +74,7 @@ public class KeyAPI
     
     public static final void removePadlock(final Location location, final ItemStack key) {
         KeyUtils.correctLocation(location);
-        KeyAPI.PLUGIN.data.padlocks.remove(location);
+        KeyAPI.plugin.data.padlocks.remove(location);
         if (isUsedKey(key)) {
             final ItemMeta meta = key.getItemMeta();
             meta.setLore((List<String>)null);
@@ -90,13 +90,13 @@ public class KeyAPI
         if (correctLocation) {
             KeyUtils.correctLocation(location);
         }
-        return KeyAPI.PLUGIN.data.padlocks.contains(location);
+        return KeyAPI.plugin.data.padlocks.contains(location);
     }
     
     public static final boolean isKey(final ItemStack item) {
-        if (KeyUtils.isValidItem(item) && item.getType() == KeyAPI.PLUGIN.config.keyMaterial) {
-            if (!KeyAPI.PLUGIN.config.canRenameItems) {
-                if (!item.getItemMeta().getDisplayName().equals(KeyAPI.PLUGIN.config.keyName)) {
+        if (KeyUtils.isValidItem(item) && item.getType() == KeyAPI.plugin.config.keyMaterial) {
+            if (!KeyAPI.plugin.config.canRenameItems) {
+                if (!item.getItemMeta().getDisplayName().equals(KeyAPI.plugin.config.keyName)) {
                     return false;
                 }
             }
@@ -118,9 +118,9 @@ public class KeyAPI
     }
     
     public static final boolean isMasterKey(final ItemStack item) {
-        if (KeyUtils.isValidItem(item) && item.getType() == KeyAPI.PLUGIN.config.masterKeyMaterial) {
-            if (!KeyAPI.PLUGIN.config.canRenameItems) {
-                if (!item.getItemMeta().getDisplayName().equals(KeyAPI.PLUGIN.config.masterKeyName)) {
+        if (KeyUtils.isValidItem(item) && item.getType() == KeyAPI.plugin.config.masterKeyMaterial) {
+            if (!KeyAPI.plugin.config.canRenameItems) {
+                if (!item.getItemMeta().getDisplayName().equals(KeyAPI.plugin.config.masterKeyName)) {
                     return false;
                 }
             }
@@ -130,9 +130,9 @@ public class KeyAPI
     }
     
     public static final boolean isBunchOfKeys(final ItemStack item) {
-        if (KeyUtils.isValidItem(item) && item.getType() == KeyAPI.PLUGIN.config.bunchOfKeysMaterial) {
-            if (!KeyAPI.PLUGIN.config.canRenameItems) {
-                if (!item.getItemMeta().getDisplayName().equals(KeyAPI.PLUGIN.config.bunchOfKeysName)) {
+        if (KeyUtils.isValidItem(item) && item.getType() == KeyAPI.plugin.config.bunchOfKeysMaterial) {
+            if (!KeyAPI.plugin.config.canRenameItems) {
+                if (!item.getItemMeta().getDisplayName().equals(KeyAPI.plugin.config.bunchOfKeysName)) {
                     return false;
                 }
             }
@@ -142,7 +142,7 @@ public class KeyAPI
     }
     
     public static final boolean isBunchOfKeys(final Inventory inventory) {
-        return inventory.getName().equals(KeyAPI.PLUGIN.config.bunchOfKeysName) && inventory.getSize() == 9;
+        return inventory.getName().equals(KeyAPI.plugin.config.bunchOfKeysName) && inventory.getSize() == 9;
     }
     
     public static final boolean isBlankBunchOfKeys(final ItemStack item) {
@@ -160,7 +160,7 @@ public class KeyAPI
     public static final boolean isValidKey(final ItemStack key, final Location location, final Player player) {
         if (isMasterKey(key)) {
             if (player != null && !player.hasPermission("Key.use.masterkey")) {
-                sendMessage((CommandSender)player, KeyAPI.PLUGIN.messages.messagePermission);
+                sendMessage((CommandSender)player, KeyAPI.plugin.messages.messagePermission);
             }
             return true;
         }
@@ -169,14 +169,14 @@ public class KeyAPI
             final Location keyLocation = extractLocation(key);
             if (keyLocation != null && keyLocation.equals((Object)location)) {
                 if (player != null && !player.hasPermission("Key.use.key")) {
-                    sendMessage((CommandSender)player, KeyAPI.PLUGIN.messages.messagePermission);
+                    sendMessage((CommandSender)player, KeyAPI.plugin.messages.messagePermission);
                 }
                 return true;
             }
             final ItemStack[] extractedKeys = extractKeys(key);
             if (extractedKeys != null) {
                 if (player != null && !player.hasPermission("Key.use.bunchofkeys")) {
-                    sendMessage((CommandSender)player, KeyAPI.PLUGIN.messages.messagePermission);
+                    sendMessage((CommandSender)player, KeyAPI.plugin.messages.messagePermission);
                     return true;
                 }
                 ItemStack[] array;
@@ -199,7 +199,7 @@ public class KeyAPI
         final List<String> lore = (List<String>)item.getItemMeta().getLore();
         String loreWorld = ChatColor.stripColor((String)lore.get(0));
         String loreLocation = ChatColor.stripColor((String)lore.get(1));
-        if (KeyAPI.PLUGIN.config.encryptLore) {
+        if (KeyAPI.plugin.config.encryptLore) {
             try {
                 loreWorld = ROT47.rotate(loreWorld);
                 loreLocation = ROT47.rotate(loreLocation);
@@ -240,7 +240,7 @@ public class KeyAPI
         final ItemMeta meta = item.getItemMeta();
         String loreWorld = location.getWorld().getName();
         String loreLocation = String.valueOf(location.getBlockX()) + ", " + location.getBlockY() + ", " + location.getBlockZ();
-        if (KeyAPI.PLUGIN.config.encryptLore) {
+        if (KeyAPI.plugin.config.encryptLore) {
             try {
                 loreWorld = ROT47.rotate(loreWorld);
                 loreLocation = ROT47.rotate(loreLocation);

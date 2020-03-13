@@ -9,9 +9,9 @@ import org.bukkit.block.Chest;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import com.steffbeard.totalwar.core.*;
 
-public class LostChestsListener extends KeyListener
-{
-    public LostChestsListener(final Main plugin) {
+public class LostChestsListener extends KeyListener {
+    
+	public LostChestsListener(final Main plugin) {
         super(plugin);
     }
     

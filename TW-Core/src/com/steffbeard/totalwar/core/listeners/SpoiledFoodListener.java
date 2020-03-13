@@ -32,6 +32,7 @@ public class SpoiledFoodListener implements Listener {
 	 */
 	
 	private Config config;
+	private ItemStack salt = Main.salt();
 	
 	@EventHandler
     void invClick(final InventoryClickEvent e) {
@@ -194,7 +195,7 @@ public class SpoiledFoodListener implements Listener {
     @EventHandler
     void furnace(final FurnaceSmeltEvent e) {
         if (e.getSource().getType().equals((Object)Material.POTION)) {
-            e.getBlock().getWorld().dropItem(e.getBlock().getLocation(), Main.salt());
+            e.getBlock().getWorld().dropItem(e.getBlock().getLocation(), salt);
         }
         if (!FoodItem.isFoodItem(e.getResult().getType())) {
             return;

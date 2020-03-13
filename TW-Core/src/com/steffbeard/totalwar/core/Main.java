@@ -38,6 +38,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import com.steffbeard.totalwar.core.calander.CalendarFiles;
+import com.steffbeard.totalwar.core.calander.CalendarJoinListener;
 import com.steffbeard.totalwar.core.calander.DayExtend;
 import com.steffbeard.totalwar.core.calander.PCalendar;
 import com.steffbeard.totalwar.core.commands.CalendarCommand;
@@ -48,11 +49,20 @@ import com.steffbeard.totalwar.core.listeners.BunchOfKeysListener;
 import com.steffbeard.totalwar.core.listeners.GlobalListener;
 import com.steffbeard.totalwar.core.listeners.HopperListener;
 import com.steffbeard.totalwar.core.listeners.ItemChecker;
+import com.steffbeard.totalwar.core.listeners.LostChestsListener;
 import com.steffbeard.totalwar.core.listeners.MinecartListener;
+import com.steffbeard.totalwar.core.listeners.MultiblockListener;
+import com.steffbeard.totalwar.core.listeners.NewDayListener;
+import com.steffbeard.totalwar.core.listeners.NewEventListener;
+import com.steffbeard.totalwar.core.listeners.PortcullisBlockListener;
+import com.steffbeard.totalwar.core.listeners.SongEndListener;
 import com.steffbeard.totalwar.core.listeners.SpoiledFoodListener;
-import com.steffbeard.totalwar.core.listeners.TorchListener;
+import com.steffbeard.totalwar.core.multiblock.MultiblockManager;
+//import com.steffbeard.totalwar.core.listeners.TorchListener;
 import com.steffbeard.totalwar.core.utils.KeyUtils;
+import com.xxmicloxx.NoteBlockAPI.NoteBlockPlayerMain;
 
+@SuppressWarnings("deprecation")
 public class Main extends JavaPlugin
 {
     public static Main instance;
@@ -111,6 +121,15 @@ public class Main extends JavaPlugin
         // deprecated until later
         //manager.registerEvents((Listener)new TorchListener(), (Plugin)this);
         manager.registerEvents((Listener)new MinecartListener(), (Plugin)this);
+        manager.registerEvents((Listener)new LostChestsListener(null), (Plugin)this);
+        manager.registerEvents((Listener)new MultiblockListener(), (Plugin)this);
+        manager.registerEvents((Listener)new PortcullisBlockListener(null), (Plugin)this);
+        manager.registerEvents((Listener)new SpoiledFoodListener(), (Plugin)this);
+        manager.registerEvents((Listener)new SongEndListener(), (Plugin)this);
+        manager.registerEvents((Listener)new MultiblockManager(), (Plugin)this);
+        manager.registerEvents((Listener)new NewDayListener(), (Plugin)this);
+        manager.registerEvents((Listener)new NewEventListener(), (Plugin)this);
+        manager.registerEvents((Listener)new CalendarJoinListener(), (Plugin)this);
         if (this.config.disableHoppers) {
             manager.registerEvents((Listener)new HopperListener(), (Plugin)this);
         
@@ -309,7 +328,7 @@ public class Main extends JavaPlugin
             saltmeta.setLore((List<String>)Arrays.asList(ChatColor.GRAY + "Place in a chest with food to preserve it"));
             saltitem.setItemMeta(saltmeta);
             return saltitem;
-        	}
+        }
         
         public void registerCommands() {
     		getCommand("playtime").setExecutor(new PlaytimeCommand());
@@ -317,8 +336,7 @@ public class Main extends JavaPlugin
     		getCommand("cal").setExecutor(new CalendarCommand());
     	}
         
-        @SuppressWarnings("deprecation")
-		public void addRecipe() {
+        public void addRecipe() {
             Material[] values;
             for (int length = (values = Material.values()).length, i = 0; i < length; ++i) {
                 final Material mat = values[i];
@@ -362,14 +380,20 @@ public class Main extends JavaPlugin
 	365.2422 days	8,766,000	121.75 hours (5.072916 days)
 
      */
-    
-    public void Calender() {
-    	
-    }
-    
+ 
     public void createConfig() {
         this.getConfig().options().copyDefaults(true);
         this.saveDefaultConfig();
+    }
+    
+    public static NoteBlockPlayerMain getNoteBlockAPI() {
+        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("NoteBlockAPI");
+
+        if (plugin == null || !(plugin instanceof NoteBlockPlayerMain)) {
+            return null;
+        }
+
+        return (NoteBlockPlayerMain) plugin;
     }
     
     public void updateTimer() {
@@ -444,6 +468,7 @@ public class Main extends JavaPlugin
     public void onDisable() {
         this.getLogger().info("> SHUTTING DOWN TOTAL WAR CORE.");
         HandlerList.unregisterAll((Plugin)this);
+        calendarFiles.save();
         try {
             this.data.save();
             KeyUtils.clearFields(this);
@@ -479,7 +504,7 @@ public class Main extends JavaPlugin
         this.onEnable();
     }
 
-    public static double getMultiplier() {
+    public double getMultiplier() {
         return Config.speedMultiplier;
     }
 
@@ -493,6 +518,6 @@ public class Main extends JavaPlugin
 
     public void sendMessage(final CommandSender sender, final String message) {
         sender.sendMessage(this.messages.prefix + " " + message);
-	}
+    }
 
 }

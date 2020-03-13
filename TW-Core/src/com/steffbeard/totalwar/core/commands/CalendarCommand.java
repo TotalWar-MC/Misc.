@@ -17,11 +17,15 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
+import com.steffbeard.totalwar.core.Main;
 import com.steffbeard.totalwar.core.Messages;
+import com.steffbeard.totalwar.core.calander.CalendarFiles;
 
 public class CalendarCommand implements CommandExecutor {
 	
 	private Messages message;
+	private Main main;
+	private CalendarFiles calendarFiles;
 	
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
@@ -35,7 +39,7 @@ public class CalendarCommand implements CommandExecutor {
                 Permission listPerm = new Permission("core.calendar.list");
 
                 if (!sender.hasPermission(calendarAdminPerm) && !sender.hasPermission(standardPerm)) {
-                    sendMessage.message.messagePermission;
+                    main.sendMessage(sender, message.messagePermission);
 
                     return false;
                 }
@@ -49,8 +53,7 @@ public class CalendarCommand implements CommandExecutor {
                 if (args[0].equalsIgnoreCase("admin") || args[0].equalsIgnoreCase("a")) {
 
                     if (!sender.hasPermission(calendarAdminPerm)) {
-                        sender.sendMessage(phprefix + nopermscolor + " You have no permission " + nopermsparenthesis + "(" + nopermsidentity +
-                                calendarAdminPerm.getName() + nopermsparenthesis + ")" + nopermscolor + " to access this command.");
+                    	main.sendMessage(sender, message.messagePermission);
 
                         return false;
                     }

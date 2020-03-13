@@ -1,21 +1,22 @@
 package com.steffbeard.totalwar.core.listeners;
 
+import com.steffbeard.totalwar.core.Main;
+import com.steffbeard.totalwar.core.calander.CalendarFiles;
 import com.steffbeard.totalwar.core.events.NewDayEvent;
+
 import com.xxmicloxx.NoteBlockAPI.*;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-
-import static us.persistenthistory.PersistentHistory.calendarFiles;
-import static us.persistenthistory.calendar.CalendarFiles.newDayAlert;
 
 public class NewDayListener implements Listener {
 
     @EventHandler
     public void onNewDay(NewDayEvent e) {
 
-        if (calendarFiles.getSetting("new-day-alert") == true) {
+        if (Main.calendarFiles.getSetting("new-day-alert") == true) {
 
             for (Player players : Bukkit.getOnlinePlayers()) {
 
@@ -30,7 +31,7 @@ public class NewDayListener implements Listener {
 
     public void playNewDayAlert(Player p) {
 
-        Song s = NBSDecoder.parse(newDayAlert);
+        Song s = NBSDecoder.parse(CalendarFiles.newDayAlert);
 
         SongPlayer sp = new RadioSongPlayer(s);
 

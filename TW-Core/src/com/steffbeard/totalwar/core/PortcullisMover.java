@@ -21,7 +21,7 @@ import com.steffbeard.totalwar.core.Directions;
 public class PortcullisMover implements Runnable {
 	
 	private Main main;
-    private static final Logger logger = Main.logger;
+    private Logger logger;
 	private Config config;
     private Portcullis portcullis;
     

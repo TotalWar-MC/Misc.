@@ -15,6 +15,7 @@ import com.steffbeard.totalwar.core.Main;
 
 public class MinecartListener implements Listener {
 
+	private Main main;
     private static final double BUKKIT_SPEED_MULTIPLIER = 0.4d;
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -30,7 +31,7 @@ public class MinecartListener implements Listener {
 
             if (rail.getType() == Material.POWERED_RAIL) {
                 if (blockBelow.getType() == Material.REDSTONE_BLOCK) {
-                    cart.setMaxSpeed(BUKKIT_SPEED_MULTIPLIER * Main.getMultiplier());
+                    cart.setMaxSpeed(BUKKIT_SPEED_MULTIPLIER * main.getMultiplier());
                 }
                 else {
                     cart.setMaxSpeed(BUKKIT_SPEED_MULTIPLIER);
