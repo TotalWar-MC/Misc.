@@ -7,7 +7,6 @@ import java.util.Map.Entry;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -16,6 +15,7 @@ import com.steffbeard.totalwar.core.Main;
 import com.steffbeard.totalwar.core.multiblock.MultiblockManager;
 
 public class Structure {
+	
 	MultiblockManager mm = new MultiblockManager();
 	private boolean loaded = true;
 	private String name = "";
@@ -30,7 +30,7 @@ public class Structure {
 			}
 		}
 		this.multiblock = b;
-		Main.mm.loadStructure(this);
+		mm.loadStructure(this);
 	}
 
 	public void delete() {
