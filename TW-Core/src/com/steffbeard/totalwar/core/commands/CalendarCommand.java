@@ -22,6 +22,7 @@ import com.steffbeard.totalwar.core.Messages;
 import com.steffbeard.totalwar.core.calander.CalendarFiles;
 import com.steffbeard.totalwar.core.calander.PCalendar;
 import com.steffbeard.totalwar.core.calander.PEvent;
+import com.steffbeard.totalwar.core.utils.fanciful.FancyMessage;
 
 public class CalendarCommand implements CommandExecutor {
 	
@@ -70,7 +71,7 @@ public class CalendarCommand implements CommandExecutor {
 
                         if (args[1].equalsIgnoreCase("timetravel") || args[1].equalsIgnoreCase("tt")) {
 
-                            String calendartttop = dashes.substring(0, dashes.length() - 4) + ChatColor.GOLD + "[" + phIdentity + ChatColor.GOLD + " : "
+                            String calendartttop = dashes.substring(0, dashes.length() - 4) + ChatColor.GOLD + "[" +  ChatColor.GOLD + " : "
                                     + ChatColor.GREEN + "Calendar - Time Travel" + ChatColor.GOLD + "]" + dashes;
 
                             if (args.length == 2) {
@@ -127,7 +128,7 @@ public class CalendarCommand implements CommandExecutor {
                             return true;
                         } else if (args[1].equalsIgnoreCase("event") || args[1].equalsIgnoreCase("e")) {
 
-                            String calendaretop = dashes.substring(0, dashes.length() - 4) + ChatColor.GOLD + "[" + phIdentity + ChatColor.GOLD + " : "
+                            String calendaretop = dashes.substring(0, dashes.length() - 4) + ChatColor.GOLD + "[" +  ChatColor.GOLD + " : "
                                     + ChatColor.GREEN + "Calendar - Event" + ChatColor.GOLD + "]" + dashes;
 
                             if (args.length == 2) {
@@ -203,7 +204,7 @@ public class CalendarCommand implements CommandExecutor {
                                 }
 
                                 if (senderEventTitle.containsKey(sender.getName()) || senderEventDesc.containsKey(sender.getName())) {
-                                    sender.sendMessage(phprefix + standardcolor + " You have canceled the event creation process.");
+                                    sender.sendMessage(ChatColor.RESET + " You have canceled the event creation process.");
                                     senderEventDesc.remove(sender.getName());
                                     senderEventTitle.remove(sender.getName());
                                     return true;
@@ -317,10 +318,10 @@ public class CalendarCommand implements CommandExecutor {
                                 GregorianCalendar cal = event.getCalendar();
                                 String time = event.getTime();
 
-                                sender.sendMessage(phprefix + successcolor + " You have successfully created an event at: ");
-                                sender.sendMessage(phprefix + identitycolor + " " + cal.get(Calendar.DAY_OF_MONTH) + " " + getMonthInString(cal) + " " +
-                                        cal.get(Calendar.YEAR) + standardcolor + " at " + identitycolor + time + standardcolor);
-                                sender.sendMessage(phprefix + standardcolor + " I hope that players attend " + identitycolor + event.getName() + standardcolor + "! Check all events with " + identitycolor + "/cal list" + standardcolor + ".");
+                                sender.sendMessage("You have successfully created an event at: ");
+                                sender.sendMessage(" " + cal.get(Calendar.DAY_OF_MONTH) + " " + getMonthInString(cal) + " " +
+                                        cal.get(Calendar.YEAR) + " at " + time);
+                                sender.sendMessage("Check all events with /cal list");
 
                                 //save to file
                                 calendarFiles.saveEvent(event);
@@ -328,7 +329,7 @@ public class CalendarCommand implements CommandExecutor {
                                 return true;
                             }
 
-                            sender.sendMessage(phprefix + errorcolor + errormsg + identitycolor + "/cal admin e" + errorcolor + " for more help.");
+                            sender.sendMessage("/cal admin e for more help.");
                             return true;
 
                         } else if (args[1].equalsIgnoreCase("toggle") || args[1].equalsIgnoreCase("t")) {
@@ -359,7 +360,7 @@ public class CalendarCommand implements CommandExecutor {
                                                 value = false;
                                                 valueAssigned = true;
                                             default:
-                                                sender.sendMessage(phprefix + standardcolor + "Provide a value of true or false when setting configuration.");
+                                                sender.sendMessage("Provide a value of true or false when setting configuration.");
                                                 return true;
                                         }
                                     }
@@ -371,7 +372,7 @@ public class CalendarCommand implements CommandExecutor {
                                                 value = !calendarFiles.getSetting("pause");
                                             }
                                             calendarFiles.setSetting("pause", value);
-                                            sender.sendMessage(phprefix + standardcolor + " You've set " + identitycolor + "PAUSE" + standardcolor + " to the value of " + identitycolor + value);
+                                            sender.sendMessage(ChatColor.RESET + "You've set " + ChatColor.GOLD + "PAUSE" + ChatColor.RESET + " to the value of " + ChatColor.GOLD + value);
                                             break;
                                         case "autosave":
                                         case "auto-save":
@@ -379,7 +380,7 @@ public class CalendarCommand implements CommandExecutor {
                                                 value = !calendarFiles.getSetting("auto-save");
                                             }
                                             calendarFiles.setSetting("auto-save", value);
-                                            sender.sendMessage(phprefix + standardcolor + " You've set " + identitycolor + "AUTO=SAVE" + standardcolor + " to the value of " + identitycolor + value);
+                                            sender.sendMessage(ChatColor.RESET + "You've set " + ChatColor.GOLD + "AUTO=SAVE" + ChatColor.RESET + " to the value of " + ChatColor.GOLD + value);
                                             break;
                                         case "autoguess":
                                         case "ag":
@@ -388,8 +389,8 @@ public class CalendarCommand implements CommandExecutor {
                                                 value = !calendarFiles.getSetting("auto-guess");
                                             }
                                             //calendarFiles.setSetting("auto-guess", value);
-                                            //sender.sendMessage(phprefix + standardcolor + " You've set " + identitycolor + "AUTO-GUESS" + standardcolor + " to the value of " + identitycolor +  value);
-                                            sender.sendMessage(phprefix + errorcolor + " Sorry! This configuration setting hasn't been tested enough! It is still under maintenance!");
+                                            //sender.sendMessage(ChatColor.RESET + " You've set " + ChatColor.GOLD + "AUTO-GUESS" + ChatColor.RESET + " to the value of " + ChatColor.GOLD +  value);
+                                            sender.sendMessage(ChatColor.YELLOW + "Sorry! This configuration setting hasn't been tested enough! It is still under maintenance!");
                                             break;
                                         case "autoshow":
                                         case "auto-show":
@@ -397,7 +398,7 @@ public class CalendarCommand implements CommandExecutor {
                                                 value = !calendarFiles.getSetting("auto-show");
                                             }
                                             calendarFiles.setSetting("auto-show", value);
-                                            sender.sendMessage(phprefix + standardcolor + " You've set " + identitycolor + "AUTO=SHOW" + standardcolor + " to the value of " + identitycolor + value);
+                                            sender.sendMessage(ChatColor.RESET + " You've set " + ChatColor.GOLD + "AUTO=SHOW" + ChatColor.RESET + " to the value of " + ChatColor.GOLD + value);
                                             break;
 
                                         case "newdayalert":
@@ -411,7 +412,7 @@ public class CalendarCommand implements CommandExecutor {
                                                 value = !calendarFiles.getSetting("new-day-alert");
                                             }
                                             calendarFiles.setSetting("new-day-alert", value);
-                                            sender.sendMessage(phprefix + standardcolor + " You've set " + identitycolor + "NEW-DAY-ALERT" + standardcolor + " to the value of " + identitycolor + value);
+                                            sender.sendMessage(ChatColor.RESET + " You've set " + ChatColor.GOLD + "NEW-DAY-ALERT" + ChatColor.RESET + " to the value of " + ChatColor.GOLD + value);
                                             break;
                                         case "eventalert":
                                         case "ea":
@@ -421,12 +422,12 @@ public class CalendarCommand implements CommandExecutor {
                                                 value = !calendarFiles.getSetting("event-alert");
                                             }
                                             calendarFiles.setSetting("event-alert", value);
-                                            sender.sendMessage(phprefix + standardcolor + " You've set " + identitycolor + "EVENT-ALERT" + standardcolor + " to the value of " + identitycolor + value);
+                                            sender.sendMessage(ChatColor.RESET + " You've set " + ChatColor.GOLD + "EVENT-ALERT" + ChatColor.RESET + " to the value of " + ChatColor.GOLD + value);
                                             break;
                                         case "list":
                                         case "l":
-                                            sender.sendMessage(ChatColor.DARK_GRAY + "" + ChatColor.STRIKETHROUGH + "" + "------------" + ChatColor.DARK_GRAY + "[" + identitycolor + " Page 1" + ChatColor.DARK_GRAY + " ]" + ChatColor.STRIKETHROUGH + "------------");
-                                            sender.sendMessage(String.format("%-22s %s", datesColor + "Setting", identitycolor + "Value"));
+                                            sender.sendMessage(ChatColor.DARK_GRAY + "" + ChatColor.STRIKETHROUGH + "" + "------------" + ChatColor.DARK_GRAY + "[" + ChatColor.GOLD + " Page 1" + ChatColor.DARK_GRAY + " ]" + ChatColor.STRIKETHROUGH + "------------");
+                                            sender.sendMessage(String.format("%-22s %s", datesColor + "Setting", ChatColor.GOLD + "Value"));
                                             sender.sendMessage("");
 
                                             for (String setting : calendarFiles.getKeySettings()) { //Gather all events
@@ -439,23 +440,23 @@ public class CalendarCommand implements CommandExecutor {
 
                                                 int width = setting.length() + addition;
 
-                                                sender.sendMessage(String.format("%-" + width + "s %s", ChatColor.BLUE + setting, identitycolor + "" + calendarFiles.getSetting(setting)));
+                                                sender.sendMessage(String.format("%-" + width + "s %s", ChatColor.BLUE + setting, ChatColor.GOLD + "" + calendarFiles.getSetting(setting)));
 
                                             }
                                             break;
                                         default:
-                                            sender.sendMessage(phprefix + standardcolor + " The page number or configuration you requested is not valid.");
+                                            sender.sendMessage(ChatColor.RESET + " The page number or configuration you requested is not valid.");
                                             return true;
                                     }
 
 
                                 }
                             } else {
-                                sender.sendMessage(phprefix + standardcolor + " The page number or configuration you requested is not valid.");
+                                sender.sendMessage(ChatColor.RESET + " The page number or configuration you requested is not valid.");
                                 return true;
                             }
                         } else {
-                            sender.sendMessage(phprefix + errorcolor + errormsg + identitycolor + "/cal admin" + errorcolor + " for more help.");
+                            sender.sendMessage(ChatColor.DARK_RED + errormsg + ChatColor.GOLD + "/cal admin" + ChatColor.DARK_RED + " for more help.");
                             //fail to find paramter. Ie : /calendar admin chicken
                         }
 
@@ -468,20 +469,20 @@ public class CalendarCommand implements CommandExecutor {
                 } else if (args[0].equalsIgnoreCase("list") || args[0].equalsIgnoreCase("l")) {
 
                     if (!sender.hasPermission(calendarAdminPerm) && !sender.hasPermission(listPerm)) {
-                        sender.sendMessage(phprefix + nopermscolor + " You have no permission " + nopermsparenthesis + "(" + nopermsidentity +
+                        sender.sendMessage(nopermscolor + " You have no permission " + nopermsparenthesis + "(" + nopermsidentity +
                                 listPerm.getName() + nopermsparenthesis + ")" + nopermscolor + " to access this command.");
 
                         return false;
                     }
 
                     if (args.length > 2) {
-                        sender.sendMessage(phprefix + standardcolor + " Did you mean to execute: " + identitycolor + "/cal list");
+                        sender.sendMessage(ChatColor.RESET + " Did you mean to execute: " + ChatColor.GOLD + "/cal list");
                         return true;
                     }
 
 
                     if (calendarFiles.getAllEvents().isEmpty()) {
-                        sender.sendMessage(phprefix + standardcolor + " There are no events registered in this server.");
+                        sender.sendMessage(ChatColor.RESET + " There are no events registered in this server.");
                         return true;
                     }
 
@@ -495,7 +496,7 @@ public class CalendarCommand implements CommandExecutor {
                         if (StringUtils.isNumeric(args[1])) {
                             page = Integer.valueOf(args[1]);
                         } else {
-                            sender.sendMessage(phprefix + standardcolor + " The page number you requested is not valid.");
+                            sender.sendMessage(ChatColor.RESET + " The page number you requested is not valid.");
                             return true;
                         }
                     }
@@ -503,12 +504,12 @@ public class CalendarCommand implements CommandExecutor {
                     List<PEvent> events = calendarFiles.getAllEventsFrom((4 * page) - 4, 4 * page);
 
                     if (events.isEmpty()) {
-                        sender.sendMessage(phprefix + standardcolor + " There are no events registered on that page.");
+                        sender.sendMessage(ChatColor.RESET + " There are no events registered on that page.");
                         return true;
                     }
 
-                    sender.sendMessage(ChatColor.DARK_GRAY + "" + ChatColor.STRIKETHROUGH + "" + "------------" + ChatColor.DARK_GRAY + "[" + identitycolor + " Page " + page + ChatColor.DARK_GRAY + " ]" + ChatColor.STRIKETHROUGH + "------------");
-                    sender.sendMessage(String.format("%-22s %s", datesColor + "Date (mm/dd/yy)", identitycolor + "Event Name")); //Header 17
+                    sender.sendMessage(ChatColor.DARK_GRAY + "" + ChatColor.STRIKETHROUGH + "" + "------------" + ChatColor.DARK_GRAY + "[" + ChatColor.GOLD + " Page " + page + ChatColor.DARK_GRAY + " ]" + ChatColor.STRIKETHROUGH + "------------");
+                    sender.sendMessage(String.format("%-22s %s", datesColor + "Date (mm/dd/yy)", ChatColor.GOLD + "Event Name")); //Header 17
                     sender.sendMessage("");
 
                     for (PEvent event : events) { //Gather all events
@@ -528,20 +529,20 @@ public class CalendarCommand implements CommandExecutor {
 
                         String formatted_date = datesColor + month + datesSptr + "-" + datesColor + day + datesSptr + "-" + datesColor + year; //20
                         String full_formatted_date = datesColor + day + " " + month_in_string + " " + year + " | " + time;
-                        String formatted_name = identitycolor + name;
-                        String formatted_desc = formatted_name + ": " + identitycolor + event.getDescription();
+                        String formatted_name = ChatColor.GOLD + name;
+                        String formatted_desc = formatted_name + ": " + ChatColor.GOLD + event.getDescription();
 
                         new FancyMessage(String.format("%-32s", formatted_date)).tooltip(full_formatted_date).then(formatted_name).tooltip(formatted_desc).send(sender);
 
                     }
-                    sender.sendMessage(phprefix + standardcolor + " Hover over dates and event names for more information.");
+                    sender.sendMessage(ChatColor.RESET + " Hover over dates and event names for more information.");
 
                     return true;
 
                 } else if (args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("h")) {
 
                     if (args.length != 1) {
-                        sender.sendMessage(phprefix + standardcolor + " Did you mean to execute: " + identitycolor + "/cal help");
+                        sender.sendMessage(ChatColor.RESET + " Did you mean to execute: " + ChatColor.GOLD + "/cal help");
                         return true;
                     } else {
                         showHelp(sender);
@@ -550,7 +551,7 @@ public class CalendarCommand implements CommandExecutor {
 
                 } else {
 
-                    sender.sendMessage(phprefix + errorcolor + errormsg + identitycolor + "/cal help" + errorcolor + " for more help.");
+                    sender.sendMessage(ChatColor.DARK_RED + errormsg + ChatColor.GOLD + "/cal help" + ChatColor.DARK_RED + " for more help.");
                 }
         }
 
@@ -578,7 +579,7 @@ public class CalendarCommand implements CommandExecutor {
 
                 if (i == expiration) {
                     senderEventTitle.remove(sender.getName());
-                    sender.sendMessage(phprefix + standardcolor + " The time to title the event has expired.");
+                    sender.sendMessage(ChatColor.RESET + " The time to title the event has expired.");
                     cancel();
                     return;
                 } else {
@@ -610,7 +611,7 @@ public class CalendarCommand implements CommandExecutor {
 
                 if (i == expiration) {
                     senderEventDesc.remove(sender.getName());
-                    sender.sendMessage(phprefix + standardcolor + " The time to give an event a description has expired.");
+                    sender.sendMessage(ChatColor.RESET + " The time to give an event a description has expired.");
                     cancel();
                     return;
                 } else {
@@ -629,7 +630,7 @@ public class CalendarCommand implements CommandExecutor {
             if (args[6].matches("\\d{2}:\\d{2}") || args[6].matches("\\d{1}:\\d{2}")) {
                 time = args[6];
             } else {
-                sender.sendMessage(phprefix + errorcolor + " The value of time is not formatted as: " + identitycolor + "x:xx" + errorcolor + ".");
+                sender.sendMessage(ChatColor.DARK_RED + " The value of time is not formatted as: " + ChatColor.GOLD + "x:xx" + ChatColor.DARK_RED + ".");
                 return "";
             }
 
@@ -637,7 +638,7 @@ public class CalendarCommand implements CommandExecutor {
                     || args[7].equalsIgnoreCase("A.M.") || args[7].equalsIgnoreCase("AM")) {
                 time_period = args[7].toUpperCase();
             } else {
-                sender.sendMessage(phprefix + errorcolor + " The value of am/pm is not defined as: " + identitycolor + "A.M. or P.M." + errorcolor + ".");
+                sender.sendMessage(ChatColor.DARK_RED + " The value of am/pm is not defined as: " + ChatColor.GOLD + "A.M. or P.M." + ChatColor.DARK_RED + ".");
                 return "";
             }
 
@@ -657,20 +658,20 @@ public class CalendarCommand implements CommandExecutor {
         if (StringUtils.isNumeric(args[3])) {
             day = Integer.parseInt(args[3].replace(" ", ""));
         } else {
-            sender.sendMessage(phprefix + errorcolor + " The value of the day is not numerical.");
+            sender.sendMessage(ChatColor.DARK_RED + " The value of the day is not numerical.");
             return null;
         }
 
         if (StringUtils.isNumeric(args[4])) {
             month = Integer.parseInt(args[4].replace(" ", ""));
         } else {
-            sender.sendMessage(phprefix + errorcolor + " The value of the month is not numerical.");
+            sender.sendMessage(ChatColor.DARK_RED + " The value of the month is not numerical.");
             return null;
         }
         if (StringUtils.isNumeric(args[5].replace(" ", ""))) {
             year = Integer.parseInt(args[5]);
         } else {
-            sender.sendMessage(phprefix + errorcolor + " The value of the year is not numerical.");
+            sender.sendMessage(ChatColor.DARK_RED + " The value of the year is not numerical.");
             return null;
         }
 
@@ -691,25 +692,25 @@ public class CalendarCommand implements CommandExecutor {
     }
 
     public void showHelp(CommandSender sender) {
-        sender.sendMessage(dashes.substring(0, dashes.length() - 4) + ChatColor.GOLD + "[" + phIdentity + ChatColor.GOLD + " : "
+        sender.sendMessage(dashes.substring(0, dashes.length() - 4) + ChatColor.GOLD + "[" +  ChatColor.GOLD + " : "
                 + ChatColor.GREEN + "Calendar - Help (Page " + 1 + ")" + ChatColor.GOLD + "]" + dashes);
 
-        sender.sendMessage(standardcolor + "To view the calendar, do the following (hover for more info): ");
+        sender.sendMessage(ChatColor.RESET + "To view the calendar, do the following (hover for more info): ");
         new FancyMessage("/calendar")
-                .color(adminidentity)
-                .tooltip(standardcolor + "The following command shows the date and time.")
+                .color(ChatColor.YELLOW)
+                .tooltip(ChatColor.RESET + "The following command shows the date and time.")
                 .send(sender);
         sender.sendMessage("");
-        sender.sendMessage(standardcolor + "To view admin panel, do the following (hover for more info): ");
+        sender.sendMessage(ChatColor.RESET + "To view admin panel, do the following (hover for more info): ");
         new FancyMessage("/calendar admin ")
-                .color(adminidentity)
-                .tooltip(standardcolor + "The following command shows the admin panel.")
+                .color(ChatColor.YELLOW)
+                .tooltip(ChatColor.RESET + "The following command shows the admin panel.")
                 .send(sender);
         sender.sendMessage("");
-        sender.sendMessage(standardcolor + "To view the event list, do the following (hover for more info): ");
+        sender.sendMessage(ChatColor.RESET + "To view the event list, do the following (hover for more info): ");
         new FancyMessage("/calendar list")
-                .color(adminidentity)
-                .tooltip(standardcolor + "The following command shows the list of events.")
+                .color(ChatColor.YELLOW)
+                .tooltip(ChatColor.RESET + "The following command shows the list of events.")
                 .send(sender);
     }
 
@@ -731,9 +732,9 @@ public class CalendarCommand implements CommandExecutor {
 
         sender.sendMessage(dashescalendar + ChatColor.GOLD + "[" + ChatColor.GRAY + "Calendar" + ChatColor.GOLD
                 + "]" + dashescalendar);
-        sender.sendMessage(standardcolor + "Date: " + identitycolor + day + " " + month + " " + year);
-        sender.sendMessage(standardcolor + "Day: " + identitycolor + dayName);
-        sender.sendMessage(standardcolor + "Time: " + identitycolor + time);
+        sender.sendMessage(ChatColor.RESET + "Date: " + ChatColor.GOLD + day + " " + month + " " + year);
+        sender.sendMessage(ChatColor.RESET + "Day: " + ChatColor.GOLD + dayName);
+        sender.sendMessage(ChatColor.RESET + "Time: " + ChatColor.GOLD + time);
 
     }
 
@@ -741,19 +742,19 @@ public class CalendarCommand implements CommandExecutor {
 
 
         sender.sendMessage(calendartop);
-        sender.sendMessage(adminidentity + "/calendar admin event" + adminsptr + " | " + admindesc + "View event help page");
-        sender.sendMessage(adminidentity + "/calendar admin timetravel" + adminsptr + " | " + admindesc + "View time-traveling help page");
-        sender.sendMessage(adminidentity + "/calendar admin toggle" + adminsptr + " | " + admindesc + "View toggle settings help page");
+        sender.sendMessage("/calendar admin event" + " | " + "View event help page");
+        sender.sendMessage("/calendar admin timetravel" + " | " + "View time-traveling help page");
+        sender.sendMessage("/calendar admin toggle" + " | " + "View toggle settings help page");
         sender.sendMessage(calendarbot);
 
 
     }
 
     public void showTimeTravelHelp(CommandSender sender) {
-        sender.sendMessage(standardcolor + "To change the date, do the following (hover for example): ");
+        sender.sendMessage(ChatColor.RESET + "To change the date, do the following (hover for example): ");
         new FancyMessage("/calendar admin tt set <day> <month> <year> [optional: time]")
-                .color(adminidentity)
-                .tooltip(standardcolor + "Example: " + adminidentity + "/cal admin tt set 13 2 1970 5:45 P.M.\n" + standardcolor + "The following example would change the date to " + identitycolor + "13 February 1970 5:45 P.M.")
+                .color(ChatColor.YELLOW)
+                .tooltip(ChatColor.RESET + "Example: " + ChatColor.YELLOW + "/cal admin tt set 13 2 1970 5:45 P.M.\n" + ChatColor.RESET + "The following example would change the date to " + ChatColor.GOLD + "13 February 1970 5:45 P.M.")
                 .send(sender);
     }
 
@@ -761,54 +762,54 @@ public class CalendarCommand implements CommandExecutor {
 
         switch (page) {
             case 1:
-                sender.sendMessage(dashes.substring(0, dashes.length() - 4) + ChatColor.GOLD + "[" + phIdentity + ChatColor.GOLD + " : "
+                sender.sendMessage(dashes.substring(0, dashes.length() - 4) + ChatColor.GOLD + "[" +  ChatColor.GOLD + " : "
                         + ChatColor.GREEN + "Calendar - Toggle (Page " + page + ")" + ChatColor.GOLD + "]" + dashes);
-                sender.sendMessage(standardcolor + "To view all the values of the configuration use: /cal admin t list");
+                sender.sendMessage(ChatColor.RESET + "To view all the values of the configuration use: /cal admin t list");
                 sender.sendMessage("");
-                sender.sendMessage(standardcolor + "To pause/resume the calendar, do the following (hover for more info): ");
+                sender.sendMessage(ChatColor.RESET + "To pause/resume the calendar, do the following (hover for more info): ");
                 new FancyMessage("/calendar admin toggle pause [#optional true/false]")
-                        .color(adminidentity)
-                        .tooltip(standardcolor + "The following command pauses/resumes time entirely. The sun will not move at all which means days cannot advance, neither will time.")
+                        .color(ChatColor.YELLOW)
+                        .tooltip(ChatColor.RESET + "The following command pauses/resumes time entirely. The sun will not move at all which means days cannot advance, neither will time.")
                         .send(sender);
                 sender.sendMessage("");
-                sender.sendMessage(standardcolor + "To toggle auto-saving, do the following (hover for more info): ");
+                sender.sendMessage(ChatColor.RESET + "To toggle auto-saving, do the following (hover for more info): ");
                 new FancyMessage("/calendar admin toggle autosave [#optional true/false]")
-                        .color(adminidentity)
-                        .tooltip(standardcolor + "The following command automatically saves the calendar into a file so in case of a crash it is able to boot up properly.\n\nRecommended: TRUE.")
+                        .color(ChatColor.YELLOW)
+                        .tooltip(ChatColor.RESET + "The following command automatically saves the calendar into a file so in case of a crash it is able to boot up properly.\n\nRecommended: TRUE.")
                         .send(sender);
                 break;
             case 2:
-                sender.sendMessage(dashes.substring(0, dashes.length() - 4) + ChatColor.GOLD + "[" + phIdentity + ChatColor.GOLD + " : "
+                sender.sendMessage(dashes.substring(0, dashes.length() - 4) + ChatColor.GOLD + "[" +  ChatColor.GOLD + " : "
                         + ChatColor.GREEN + "Calendar - Toggle (Page " + page + ")" + ChatColor.GOLD + "]" + dashes);
-                sender.sendMessage(standardcolor + "To toggle auto-guess, do the following (hover for more info): ");
+                sender.sendMessage(ChatColor.RESET + "To toggle auto-guess, do the following (hover for more info): ");
                 new FancyMessage("/calendar admin toggle autoguess [#optional true/false]")
-                        .color(adminidentity)
-                        .tooltip(standardcolor + "The following command automatically accurately guesses the the calendar's date while the server is offline. \nFor instance, if the server is to be offline for a day. Would you like the calendar to remain the same date/time before it wnet offline or \nto accurately estimate the date/time it missed on.")
+                        .color(ChatColor.YELLOW)
+                        .tooltip(ChatColor.RESET + "The following command automatically accurately guesses the the calendar's date while the server is offline. \nFor instance, if the server is to be offline for a day. Would you like the calendar to remain the same date/time before it wnet offline or \nto accurately estimate the date/time it missed on.")
                         .send(sender);
                 sender.sendMessage("");
-                sender.sendMessage(standardcolor + "To toggle new day alerts, do the following (hover for more info): ");
+                sender.sendMessage(ChatColor.RESET + "To toggle new day alerts, do the following (hover for more info): ");
                 new FancyMessage("/calendar admin toggle newDayAlerts [#optional true/false]")
-                        .color(adminidentity)
-                        .tooltip(standardcolor + "The following command toggles the lovely note block tune that plays at midnight, the start of a new day.")
+                        .color(ChatColor.YELLOW)
+                        .tooltip(ChatColor.RESET + "The following command toggles the lovely note block tune that plays at midnight, the start of a new day.")
                         .send(sender);
                 sender.sendMessage("");
-                sender.sendMessage(standardcolor + "To toggle event alerts, do the following (hover for more info): ");
+                sender.sendMessage(ChatColor.RESET + "To toggle event alerts, do the following (hover for more info): ");
                 new FancyMessage("/calendar admin toggle eventAlerts [#optional true/false]")
-                        .color(adminidentity)
-                        .tooltip(standardcolor + "The following command toggles the melodic note block tune that plays at the time of an event.")
+                        .color(ChatColor.YELLOW)
+                        .tooltip(ChatColor.RESET + "The following command toggles the melodic note block tune that plays at the time of an event.")
                         .send(sender);
                 break;
             case 3:
-                sender.sendMessage(dashes.substring(0, dashes.length() - 4) + ChatColor.GOLD + "[" + phIdentity + ChatColor.GOLD + " : "
+                sender.sendMessage(dashes.substring(0, dashes.length() - 4) + ChatColor.GOLD + "[" +  ChatColor.GOLD + " : "
                         + ChatColor.GREEN + "Calendar - Toggle (Page " + page + ")" + ChatColor.GOLD + "]" + dashes);
-                sender.sendMessage(standardcolor + "To toggle auto-show, do the following (hover for more info): ");
+                sender.sendMessage(ChatColor.RESET + "To toggle auto-show, do the following (hover for more info): ");
                 new FancyMessage("/calendar admin toggle autoshow [#optional true/false]")
-                        .color(adminidentity)
-                        .tooltip(standardcolor + "The following command decides whether the calendar should automatically display to the user as a join message.")
+                        .color(ChatColor.YELLOW)
+                        .tooltip(ChatColor.RESET + "The following command decides whether the calendar should automatically display to the user as a join message.")
                         .send(sender);
                 break;
             default:
-                sender.sendMessage(phprefix + standardcolor + " There are no toggle options registered in this page.");
+                sender.sendMessage(ChatColor.RESET + " There are no toggle options registered in this page.");
                 break;
         }
 
@@ -816,16 +817,16 @@ public class CalendarCommand implements CommandExecutor {
 
     public void showEventHelp(CommandSender sender) {
 
-        sender.sendMessage(standardcolor + "To add an event, do the following (hover for example): ");
+        sender.sendMessage(ChatColor.RESET + "To add an event, do the following (hover for example): ");
         new FancyMessage("/cal admin e add <day> <month> <year> [optional: time]")
-                .color(adminidentity)
-                .tooltip(standardcolor + "Example: " + adminidentity + "/cal admin e add 13 2 1970 5:45 P.M.\n" + standardcolor + "The following example would add an event in " + identitycolor + "13 February 1970 5:45 P.M.")
+                .color(ChatColor.YELLOW)
+                .tooltip(ChatColor.RESET + "Example: " + adminidentity + "/cal admin e add 13 2 1970 5:45 P.M.\n" + ChatColor.RESET + "The following example would add an event in " + ChatColor.GOLD + "13 February 1970 5:45 P.M.")
                 .send(sender);
         sender.sendMessage("");
-        sender.sendMessage(standardcolor + "To remove an event, do the following (hover for example): ");
+        sender.sendMessage(ChatColor.RESET + "To remove an event, do the following (hover for example): ");
         new FancyMessage("/cal admin e remove <title-of-event>")
-                .color(adminidentity)
-                .tooltip(standardcolor + "Example: " + adminidentity + "/cal admin e remove myTitle\n" + standardcolor + "The following example would remove the event with the name of" + identitycolor + " \"myTitle\"")
+                .color(ChatColor.YELLOW)
+                .tooltip(ChatColor.RESET + "Example: " + adminidentity + "/cal admin e remove myTitle\n" + ChatColor.RESET + "The following example would remove the event with the name of" + ChatColor.GOLD + " \"myTitle\"")
                 .send(sender);
 
     }

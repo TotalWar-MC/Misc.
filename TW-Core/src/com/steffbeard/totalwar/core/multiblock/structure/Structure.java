@@ -12,6 +12,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import com.steffbeard.totalwar.core.Main;
 import com.steffbeard.totalwar.core.multiblock.MultiblockManager;
 
 public class Structure {

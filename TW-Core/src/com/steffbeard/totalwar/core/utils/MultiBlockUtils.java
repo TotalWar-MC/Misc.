@@ -12,9 +12,11 @@ import org.bukkit.block.data.Waterlogged;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import net.minecraft.server.v1_12_R1.Block;
+
 public class MultiBlockUtils {
 
-	public static BlockData getBlockDataFromString(Location loc, String value) {
+	public static Block getBlockDataFromString(Location loc, String value) {
 		String[] d = value.replaceAll("\\[", "|").replaceAll("\\]", "").replace("minecraft:", "").split("([|])");
 		String material = "";
 		String data = "";
