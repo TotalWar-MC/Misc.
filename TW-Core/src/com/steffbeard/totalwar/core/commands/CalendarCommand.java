@@ -20,12 +20,15 @@ import java.util.Locale;
 import com.steffbeard.totalwar.core.Main;
 import com.steffbeard.totalwar.core.Messages;
 import com.steffbeard.totalwar.core.calander.CalendarFiles;
+import com.steffbeard.totalwar.core.calander.PCalendar;
+import com.steffbeard.totalwar.core.calander.PEvent;
 
 public class CalendarCommand implements CommandExecutor {
 	
 	private Messages message;
 	private Main main;
 	private CalendarFiles calendarFiles;
+	private PCalendar pCalendar;
 	
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
@@ -83,7 +86,7 @@ public class CalendarCommand implements CommandExecutor {
                                     showTimeTravelHelp(sender);
                                     return true;
                                 } else if (args.length > 8) {
-                                    sender.sendMessage(phprefix + errorcolor + errormsg + identitycolor + "/cal admin tt set" + errorcolor + " for more help.");
+                                    sender.sendMessage("/cal admin tt set for more help.");
                                     return true;
                                 }
 
@@ -110,8 +113,8 @@ public class CalendarCommand implements CommandExecutor {
                                 month_string = getMonthInString(gc);
 
 
-                                sender.sendMessage(phprefix + successcolor + " We're time traveling to: " + identitycolor + gc.get(Calendar.DAY_OF_MONTH) + " " +
-                                        month_string + " " + gc.get(Calendar.YEAR) + successcolor + ". The time is now " + identitycolor + officialtime);
+                                sender.sendMessage("We're time traveling to: " + gc.get(Calendar.DAY_OF_MONTH) + " " +
+                                        month_string + " " + gc.get(Calendar.YEAR) + ChatColor.GREEN + ". The time is now " + ChatColor.GOLD + officialtime);
 
                                 pCalendar.setCalendar(gc);
                                 pCalendar.setTicks(pCalendar.getTicksOf12HrTime(officialtime));
@@ -120,7 +123,7 @@ public class CalendarCommand implements CommandExecutor {
                                 return true;
                             }
 
-                            sender.sendMessage(phprefix + errorcolor + errormsg + identitycolor + "/cal admin tt" + errorcolor + " for more help.");
+                            sender.sendMessage("/cal admin tt for more help.");
                             return true;
                         } else if (args[1].equalsIgnoreCase("event") || args[1].equalsIgnoreCase("e")) {
 
@@ -142,13 +145,13 @@ public class CalendarCommand implements CommandExecutor {
                                 }
 
                                 if (args.length > 8 || args.length < 6) {
-                                    sender.sendMessage(phprefix + errorcolor + errormsg + identitycolor + "/cal admin e" + errorcolor + " for more help.");
+                                    sender.sendMessage("/cal admin e for more help.");
                                     return true;
                                 }
 
 
                                 if (senderEventTitle.containsKey(sender.getName()) || senderEventDesc.containsKey(sender.getName())) {
-                                    sender.sendMessage(phprefix + errorcolor + " You are in the process of making an event. You can cancel with " + identitycolor + "/cal admin e cancel" + errorcolor + ".");
+                                    sender.sendMessage("You are in the process of making an event. You can cancel with " + ChatColor.RED + "/cal admin e cancel");
                                     return true;
                                 }
 
@@ -178,8 +181,8 @@ public class CalendarCommand implements CommandExecutor {
                                 // what is the event desc : / cal admin e desc <desc>
 
 
-                                sender.sendMessage(phprefix + standardcolor + " Enter the title of the event: " + identitycolor + "/cal admin e title <title>" + standardcolor + ".");
-                                sender.sendMessage(standardcolor + " You have 15 seconds to enter an event name. To cancel the event: " + identitycolor + "/cal admin e cancel");
+                                sender.sendMessage("Enter the title of the event: /cal admin e title <title>");
+                                sender.sendMessage("You have 15 seconds to enter an event name. To cancel the event: /cal admin e cancel");
 
 
                                 PEvent pEvent = new PEvent(getCalendarFromArguments(sender, args), officialtime);
@@ -205,7 +208,7 @@ public class CalendarCommand implements CommandExecutor {
                                     senderEventTitle.remove(sender.getName());
                                     return true;
                                 } else {
-                                    sender.sendMessage(phprefix + standardcolor + " You must create an event in order to cancel one. For more help: " + identitycolor + "/cal admin e" + standardcolor + ".");
+                                    sender.sendMessage("You must create an event in order to cancel one. For more help: /cal admin e");
                                     return false;
                                 }
                             } else if (args[2].equalsIgnoreCase("remove") || args[2].equalsIgnoreCase("r")) {
@@ -229,19 +232,19 @@ public class CalendarCommand implements CommandExecutor {
 
                                 if (calendarFiles.isEvent(name)) {
                                     PEvent event = calendarFiles.getEvent(name);
-                                    sender.sendMessage(phprefix + successcolor + " You have successfully removed the event: " + identitycolor + event.getName() + standardcolor + ".");
+                                    sender.sendMessage(ChatColor.DARK_GREEN + "You have successfully removed the event: " + ChatColor.GOLD + event.getName());
                                     calendarFiles.removeEvent(event.getName());
                                     return true;
                                 }
 
 
-                                sender.sendMessage(phprefix + errorcolor + " There is no event with that name. No event was removed.");
+                                sender.sendMessage(ChatColor.RED + "There is no event with that name. No event was removed.");
                                 return false;
 
                             } else if (args[2].equalsIgnoreCase("title") || args[2].equalsIgnoreCase("t")) {
 
                                 if (!senderEventTitle.containsKey(sender.getName())) {
-                                    sender.sendMessage(phprefix + standardcolor + " You must create an event in order to name one. For more help: " + identitycolor + "/cal admin e" + standardcolor + ".");
+                                    sender.sendMessage("You must create an event in order to name one. For more help: /cal admin e");
                                     return true;
                                 }
                                 if (args.length == 3) {
@@ -264,7 +267,7 @@ public class CalendarCommand implements CommandExecutor {
                                 }
 
                                 if (calendarFiles.isEvent(name)) {
-                                    sender.sendMessage(phprefix + errorcolor + " There's already an event with this name.");
+                                    sender.sendMessage(ChatColor.DARK_RED + "There's already an event with this name.");
                                     return true;
                                 }
 
@@ -273,8 +276,8 @@ public class CalendarCommand implements CommandExecutor {
 
                                 senderEventDesc.put(sender.getName(), event);
 
-                                sender.sendMessage(phprefix + standardcolor + " Enter the description of the event: " + identitycolor + "/cal admin e desc <desc>" + standardcolor + ".");
-                                sender.sendMessage(standardcolor + " You have 1 minute to enter an event name. To cancel the event: " + identitycolor + "/cal admin e cancel");
+                                sender.sendMessage("Enter the description of the event: /cal admin e desc <desc>");
+                                sender.sendMessage("You have 1 minute to enter an event name. To cancel the event: /cal admin e cancel");
 
                                 createEventDescThread(sender, 60);
 
@@ -285,7 +288,7 @@ public class CalendarCommand implements CommandExecutor {
                             } else if (args[2].equalsIgnoreCase("desc") || args[2].equalsIgnoreCase("d") || args[2].equalsIgnoreCase("description")) {
 
                                 if (!senderEventDesc.containsKey(sender.getName())) {
-                                    sender.sendMessage(phprefix + standardcolor + " You must create an event title in order to describe one. For more help: " + identitycolor + "/cal admin e" + standardcolor + ".");
+                                    sender.sendMessage("You must create an event title in order to describe one. For more help: /cal admin e");
                                     return true;
                                 }
                                 if (args.length == 3) {
