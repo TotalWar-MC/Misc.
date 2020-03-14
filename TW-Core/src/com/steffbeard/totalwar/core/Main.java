@@ -58,13 +58,11 @@ import com.steffbeard.totalwar.core.listeners.SongEndListener;
 import com.steffbeard.totalwar.core.listeners.SpoiledFoodListener;
 //import com.steffbeard.totalwar.core.listeners.TorchListener;
 import com.steffbeard.totalwar.core.utils.KeyUtils;
-import com.steffbeard.totalwar.core.utils.structure.StructurePhysicsListener;
-import com.xxmicloxx.NoteBlockAPI.NoteBlockPlayerMain;
 
 @SuppressWarnings("deprecation")
-public class Main extends JavaPlugin
-{
-    public static Main instance;
+public class Main extends JavaPlugin {
+    
+	public static Main instance;
     public static Logger logger;
     public static CalendarFiles calendarFiles;
     public static PCalendar pCalendar;
@@ -127,7 +125,6 @@ public class Main extends JavaPlugin
         manager.registerEvents((Listener)new NewDayListener(), (Plugin)this);
         manager.registerEvents((Listener)new NewEventListener(), (Plugin)this);
         manager.registerEvents((Listener)new CalendarJoinListener(), (Plugin)this);
-        manager.registerEvents((Listener)new StructurePhysicsListener(), (Plugin)this);
         if (this.config.disableHoppers) {
             manager.registerEvents((Listener)new HopperListener(), (Plugin)this);
         
@@ -382,16 +379,6 @@ public class Main extends JavaPlugin
     public void createConfig() {
         this.getConfig().options().copyDefaults(true);
         this.saveDefaultConfig();
-    }
-    
-    public static NoteBlockPlayerMain getNoteBlockAPI() {
-        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("NoteBlockAPI");
-
-        if (plugin == null || !(plugin instanceof NoteBlockPlayerMain)) {
-            return null;
-        }
-
-        return (NoteBlockPlayerMain) plugin;
     }
     
     public void updateTimer() {

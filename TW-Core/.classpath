@@ -14,5 +14,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Spigot Library"/>
 	<classpathentry kind="lib" path="/Users/mohamedrashed/Downloads/guava-jdk5-17.0-rc1.jar"/>
 	<classpathentry kind="lib" path="/Users/mohamedrashed/Downloads/Persistent-History-master/libs/NoteBlockAPI-1.2.5.jar"/>
+	<classpathentry kind="lib" path="/Users/mohamedrashed/Downloads/lombok.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

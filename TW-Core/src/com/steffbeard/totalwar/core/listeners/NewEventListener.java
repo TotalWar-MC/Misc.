@@ -9,9 +9,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+@SuppressWarnings("deprecation")
 public class NewEventListener implements Listener {
 
-    @EventHandler
+	@EventHandler
     public void onNewEvent(NewEventEvent e) {
 
         if (Main.calendarFiles.getSetting("event-alert") == true) {

@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 
+@SuppressWarnings("unused")
 public class CalendarFiles {
 	
 	private Main plugin;
@@ -199,7 +200,7 @@ public class CalendarFiles {
                 throw new IllegalArgumentException("The embedded resource '" + resourcePath + "' cannot be found in " + plugin.getName());
             } else {
                 File outFile = new File(out_to_folder, name);
-                int lastIndex = resourcePath.lastIndexOf(47);
+				int lastIndex = resourcePath.lastIndexOf(47);
 
                 try {
                     if (outFile.exists() && !replace) {

@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+@SuppressWarnings("deprecation")
 public class SongEndListener implements Listener {
 
     @EventHandler

@@ -25,6 +25,7 @@ import com.steffbeard.totalwar.core.calander.PCalendar;
 import com.steffbeard.totalwar.core.calander.PEvent;
 import com.steffbeard.totalwar.core.utils.fanciful.FancyMessage;
 
+@SuppressWarnings("unused")
 public class CalendarCommand implements CommandExecutor {
 	
 	private Messages message;

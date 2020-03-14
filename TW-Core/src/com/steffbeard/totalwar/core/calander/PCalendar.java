@@ -7,6 +7,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.GregorianCalendar;
 
+@SuppressWarnings("unused")
 public class PCalendar  {
 
     GregorianCalendar gc;
