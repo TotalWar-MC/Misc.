@@ -8,16 +8,16 @@ import java.util.Set;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import java.util.Random;
-import org.bukkit.plugin.java.JavaPlugin;
+import com.steffbeard.totalwar.core.Main;
+
 import org.bukkit.event.Listener;
 
 public class ChatListener implements Listener {
     
-	private JavaPlugin plugin;
+	private Main plugin;
     private Random rand;
     
-    public ChatListener(final JavaPlugin p) {
-        this.plugin = p;
+    public ChatListener() {
         this.rand = new Random();
     }
     
