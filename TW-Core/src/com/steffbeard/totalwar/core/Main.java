@@ -42,10 +42,12 @@ import com.steffbeard.totalwar.core.calander.CalendarJoinListener;
 import com.steffbeard.totalwar.core.calander.DayExtend;
 import com.steffbeard.totalwar.core.calander.PCalendar;
 import com.steffbeard.totalwar.core.commands.CalendarCommand;
+import com.steffbeard.totalwar.core.commands.ChatCommand;
 import com.steffbeard.totalwar.core.commands.PlaytimeCommand;
 import com.steffbeard.totalwar.core.listeners.ArrowListener;
 import com.steffbeard.totalwar.core.listeners.BlocksListener;
 import com.steffbeard.totalwar.core.listeners.BunchOfKeysListener;
+import com.steffbeard.totalwar.core.listeners.ChatListener;
 import com.steffbeard.totalwar.core.listeners.GlobalListener;
 import com.steffbeard.totalwar.core.listeners.HopperListener;
 import com.steffbeard.totalwar.core.listeners.ItemChecker;
@@ -125,6 +127,7 @@ public class Main extends JavaPlugin {
         manager.registerEvents((Listener)new NewDayListener(), (Plugin)this);
         manager.registerEvents((Listener)new NewEventListener(), (Plugin)this);
         manager.registerEvents((Listener)new CalendarJoinListener(), (Plugin)this);
+        manager.registerEvents((Listener)new ChatListener(), (Plugin)this);
         if (this.config.disableHoppers) {
             manager.registerEvents((Listener)new HopperListener(), (Plugin)this);
         
@@ -329,6 +332,8 @@ public class Main extends JavaPlugin {
     		getCommand("playtime").setExecutor(new PlaytimeCommand());
     		getCommand("calendar").setExecutor(new CalendarCommand());
     		getCommand("cal").setExecutor(new CalendarCommand());
+    		getCommand("tr").setExecutor(new ChatCommand());
+    		getCommand("textreplace").setExecutor(new ChatCommand());
     	}
         
         public void addRecipe() {

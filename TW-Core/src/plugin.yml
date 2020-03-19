@@ -4,7 +4,12 @@ authors: [Steffbeard, zune]
 version: 1.4.0
 
 commands:
+  textreplace:
+    aliases: tr
+    usage: 
+    description:
   cal:
+    aliases: calendar
     usage:
     description:
   calendar:
@@ -15,6 +20,9 @@ commands:
     description: Shows playtime
 
 permissions:
+  textreplace.admin:
+    default: op
+    description:
   core.calendar.admin:
     default: op
     description: Calendar admin commands.
