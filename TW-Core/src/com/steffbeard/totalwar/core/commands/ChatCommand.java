@@ -18,10 +18,6 @@ public class ChatCommand implements CommandExecutor {
    
 	private Main plugin;
     
-    public ChatCommand(final Main p) {
-        this.plugin = p;
-    }
-    
     public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
         final FileConfiguration cfg = this.plugin.getConfig();
         if (args.length < 1 || args[0].equalsIgnoreCase("help")) {
